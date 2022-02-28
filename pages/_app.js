@@ -1,7 +1,8 @@
-import '../styles/globals.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-function MyApp({ Component, pageProps }) {
+
+function LiveUpApp({ Component, pageProps }) {
   return <Component {...pageProps} />
 }
 
-export default MyApp
+export default LiveUpApp
