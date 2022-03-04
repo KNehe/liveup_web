@@ -11,8 +11,23 @@ const login = async (userData) => {
     return response.data
 }
 
+const verifyToken = async (token) => {
+    const response = await axios.post(API_URL + 'token/verify/', {token})
+    if (response.status === 200) {
+        return true
+    }
+    return false
+}
+
+const logout = () => {
+    localStorage.removeItem('authDetails')
+    console.log('OUTER HERE')
+}
+
 const authService = {
-    login
+    login,
+    verifyToken,
+    logout,
 }
 
 export default authService
