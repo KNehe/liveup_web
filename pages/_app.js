@@ -4,15 +4,18 @@ import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 import Layout from "../components/layout";
+import { SSRProvider } from "react-bootstrap";
 
 
 function LiveUpApp({ Component, pageProps }) {
   return (
     <>
       <Provider store={store}>
+        <SSRProvider>
         <Layout>
           <Component {...pageProps} />
         </Layout>
+        </SSRProvider>
       </Provider>
       <ToastContainer />
     </>
