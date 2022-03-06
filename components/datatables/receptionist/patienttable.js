@@ -1,9 +1,11 @@
 import { tableIcons } from "../tableicons";
 import MaterialTable from "material-table";
 import { useState } from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
 
 import PatientDetailModal from "../../modals/receptionists/patient_detail_modal";
 import EditPatientDetailModal from "../../modals/receptionists/edit_patient_detail_modal";
+import RegisterPatientModal from "../../modals/receptionists/register_patient_modal";
 
 const RegisteredPatientsTable = ({ data }) => {
   // Doing this because redux-toolkit applies object.freeze() on data
@@ -12,6 +14,7 @@ const RegisteredPatientsTable = ({ data }) => {
 
   const [showPatientDetailModal, setPatientDetailModal] = useState(false);
   const [showEditDetailModal, setEditDetailModal] = useState(false);
+  const [showAddPatientModal, setAddPatientModal] = useState(false);
 
   const [selectedPatient, setSelectedPatient] = useState(null);
 
@@ -21,6 +24,10 @@ const RegisteredPatientsTable = ({ data }) => {
 
   const handleCloseEditModal = () => {
     setEditDetailModal(false);
+  };
+
+  const handleAddModal = () => {
+    setAddPatientModal(false);
   };
 
   const columns = [
@@ -55,24 +62,36 @@ const RegisteredPatientsTable = ({ data }) => {
 
   return (
     <>
-    {/* Registered Patients Data Table */}
-      <div style={{ maxWidth: "100%" }}>
-        <MaterialTable
-          icons={tableIcons}
-          columns={columns}
-          data={patientData}
-          title="Patients You Have Registered"
-          actions={actions}
-          options={{
-            sorting: true,
-            exportButton: true,
-            actionsColumnIndex: -1,
-            paging: false,
-            sorting: true,
-            draggable: true,
-          }}
-        />
-      </div>
+      {/* Registered Patients Data Table */}
+      <Container>
+        <Row className="mb-2">
+          <Col>&nbsp;</Col>
+          <Col>
+            <Button variant="primary" onClick={(e) => setAddPatientModal(true)}>
+              Register patient
+            </Button>
+          </Col>
+        </Row>
+        <Row>
+          <div style={{ maxWidth: "100%" }}>
+            <MaterialTable
+              icons={tableIcons}
+              columns={columns}
+              data={patientData}
+              title="Patients You Have Registered"
+              actions={actions}
+              options={{
+                sorting: true,
+                exportButton: true,
+                actionsColumnIndex: -1,
+                paging: false,
+                sorting: true,
+                draggable: true,
+              }}
+            />
+          </div>
+        </Row>
+      </Container>
 
       {/* Patient Detail Modal */}
       <PatientDetailModal
@@ -86,6 +105,12 @@ const RegisteredPatientsTable = ({ data }) => {
         show={showEditDetailModal}
         handleClose={handleCloseEditModal}
         selectedPatient={selectedPatient}
+      />
+
+      {/* Regsiter Patient  Modal */}
+      <RegisterPatientModal
+        show={showAddPatientModal}
+        handleClose={handleAddModal}
       />
     </>
   );

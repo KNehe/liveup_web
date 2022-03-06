@@ -31,7 +31,7 @@ const Index = () => {
   return (
     <>
       <Head>
-        <title>{authDetails.user.username} | Receptionist</title>
+        <title>{authDetails?.user?.username} | Receptionist</title>
       </Head>
       <div style={{ marginTop: "20vh" }}></div>
       <Container>

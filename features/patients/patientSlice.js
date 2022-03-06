@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { modifyResponseMessage } from "../../utils/messages";
 import patientService from "./patientService";
 
 const initialState = {
@@ -11,6 +12,10 @@ const initialState = {
   isUpdatingPatientSuccess: false,
   isUpdatingPatientError: false,
   isUpdatingPatientMessage: false,
+  isRegisteringPatient: false,
+  isRegisteringSuccess: false,
+  isRegisteringError: false,
+  registeringMessage: false,
 };
 
 // get patients registered receptionist
@@ -59,11 +64,28 @@ export const updatePatientDetails = createAsyncThunk(
   }
 );
 
+// register patient
+export const registerPatient = createAsyncThunk(
+  "patients/register",
+  async (patientDetails, thunkAPI) => {
+    try {
+      const accessToken = thunkAPI.getState().auth.authDetails.access_token;
+      return await patientService.registerPatient(accessToken, patientDetails);
+    } catch (error) {
+      const message = modifyResponseMessage(error)
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const patientSlice = createSlice({
   name: "patient",
   initialState,
   reducers: {
     resetPatient: (state) => initialState,
+    resetRegisteringError: (state) => {
+      state.isRegisteringError = false
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -87,15 +109,29 @@ export const patientSlice = createSlice({
       })
       .addCase(updatePatientDetails.fulfilled, (state, action) => {
         state.isUpdatingPatient = false
-        state.isUpdatingPatientSuccess = true;
+        state.isUpdatingPatientSuccess = true
       })
       .addCase(updatePatientDetails.rejected, (state, action) => {
         state.isUpdatingPatient = false
-        state.isUpdatingPatientError = true;
-        state.isUpdatingPatientMessage = action.payload;
+        state.isUpdatingPatientError = true
+        state.isUpdatingPatientSuccess = false
+        state.isUpdatingPatientMessage = action.payload
+      })
+      .addCase(registerPatient.pending, (state) =>{
+        state.isRegisteringPatient = true
+      })
+      .addCase(registerPatient.fulfilled, (state, action) => {
+        state.isRegisteringPatient = false
+        state.isRegisteringSuccess = true
+      })
+      .addCase(registerPatient.rejected, (state, action) => {
+        state.isRegisteringPatient = false
+        state.isRegisteringError = true
+        state.isRegisteringSuccess = false
+        state.registeringMessage = action.payload
       })
   },
 });
 
-export const { resetPatient } = patientSlice.actions;
+export const { resetPatient, resetRegisteringError } = patientSlice.actions;
 export default patientSlice.reducer;

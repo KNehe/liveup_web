@@ -28,10 +28,23 @@ const updatePatientDetails = async (accessToken, patientUri, patientDetails) => 
     return response.data
 }
 
+const registerPatient = async (accessToken, patientDetails) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    }
+
+    const response = await axios.post(API_URL + 'patients/', patientDetails, config)
+
+    return response.data
+}
+
 
 const patientService = {
     getPatientsRegisteredByReceptionist,
     updatePatientDetails,
+    registerPatient,
 }
 
 export default patientService
