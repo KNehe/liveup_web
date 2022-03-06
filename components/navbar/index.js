@@ -1,6 +1,5 @@
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Link from "next/link";
 import {logout} from '../../features/auth/authSlice'
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -14,7 +13,9 @@ const CNavbar = () => {
   const router = useRouter()
 
   useEffect(()=>{
-      setTitle(`Signed in as ${authDetails.user.username}`)
+    if (authDetails){
+      setTitle(`Signed in as ${authDetails?.user?.username}`)
+    }
   }, [authDetails])
 
   const onLogout = e => {

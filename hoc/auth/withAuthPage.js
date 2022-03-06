@@ -7,7 +7,7 @@ const withAuthPage = (AuthComponent) => {
 
         if (typeof window !== "undefined") {
             const authDetails = JSON.parse(localStorage.getItem('authDetails'))
-            if (!authDetails && !authDetails?.user || !authDetails?.access_token){
+            if (!authDetails || !authDetails?.user || !authDetails?.access_token){
                 return <AuthComponent {...props}/>
             } else {
                 useNavigator(router, authDetails)
