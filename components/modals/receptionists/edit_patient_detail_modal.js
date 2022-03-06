@@ -2,12 +2,15 @@ import { useState, useEffect } from "react";
 import { Button, Modal, Card, Form, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { updatePatientDetails, getPatientsForRecep } from '../../../features/patients/patientSlice'
+import {
+  updatePatientDetails,
+  getPatientsForRecep,
+} from "../../../features/patients/patientSlice";
 
 const EditPatientDetailModal = ({ show, handleClose, selectedPatient }) => {
   const [patientFormData, setPatientFormData] = useState(selectedPatient);
 
-  const [isFectchingUpdate, setFetchingUpdate] = useState(false)
+  const [isFectchingUpdate, setFetchingUpdate] = useState(false);
 
   const {
     isUpdatingPatient,
@@ -16,29 +19,27 @@ const EditPatientDetailModal = ({ show, handleClose, selectedPatient }) => {
     isUpdatingPatientSuccess,
   } = useSelector((state) => state.patient);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setPatientFormData(selectedPatient);
   }, [selectedPatient]);
 
-  useEffect(()=>{
-    if (isUpdatingPatientError){
-      toast.error(isUpdatingPatientMessage)
+  useEffect(() => {
+    if (isUpdatingPatientError) {
+      toast.error(isUpdatingPatientMessage);
     }
-  }, [isUpdatingPatientError, isUpdatingPatientMessage])
+  }, [isUpdatingPatientError, isUpdatingPatientMessage]);
 
-  useEffect(()=>{
-    if (isUpdatingPatientSuccess && !isUpdatingPatient && show){
-      setFetchingUpdate(true)
-      toast.info('Patient Details modified successfully')
-      setTimeout(()=>{
-        //Reload state with new data that includes updated patient
-        dispatch(getPatientsForRecep(null))
-        setFetchingUpdate(false)
-      }, 2000)
+  useEffect(() => {
+    if (isUpdatingPatientSuccess && !isUpdatingPatient && show) {
+      setFetchingUpdate(true);
+      toast.info("Patient Details modified successfully");
+      //Reload state with new data that includes updated patient
+      dispatch(getPatientsForRecep(null));
+      setFetchingUpdate(false);
     }
-  }, [isUpdatingPatientSuccess, isUpdatingPatient])
+  }, [isUpdatingPatientSuccess, isUpdatingPatient]);
 
   const onInputChange = (e) => {
     setPatientFormData((previousState) => ({
@@ -49,7 +50,7 @@ const EditPatientDetailModal = ({ show, handleClose, selectedPatient }) => {
 
   const onFormSubmitted = (e) => {
     e.preventDefault();
-    dispatch(updatePatientDetails(patientFormData))
+    dispatch(updatePatientDetails(patientFormData));
   };
 
   return (
@@ -66,7 +67,7 @@ const EditPatientDetailModal = ({ show, handleClose, selectedPatient }) => {
                 <Form.Control
                   required
                   onChange={onInputChange}
-                  value={patientFormData?.patient_name || ''}
+                  value={patientFormData?.patient_name || ""}
                   name="patient_name"
                   type="text"
                   placeholder="Enter patient name"
@@ -78,7 +79,7 @@ const EditPatientDetailModal = ({ show, handleClose, selectedPatient }) => {
                 <Form.Control
                   required
                   onChange={onInputChange}
-                  value={patientFormData?.next_of_kin || ''}
+                  value={patientFormData?.next_of_kin || ""}
                   name="next_of_kin"
                   type="text"
                   placeholder="Enter next of kin"
@@ -90,7 +91,7 @@ const EditPatientDetailModal = ({ show, handleClose, selectedPatient }) => {
                 <Form.Control
                   required
                   onChange={onInputChange}
-                  value={patientFormData?.address || ''}
+                  value={patientFormData?.address || ""}
                   name="address"
                   type="text"
                   placeholder="Enter address"
@@ -102,7 +103,7 @@ const EditPatientDetailModal = ({ show, handleClose, selectedPatient }) => {
                 <Form.Control
                   required
                   onChange={onInputChange}
-                  value={patientFormData?.contacts || ''}
+                  value={patientFormData?.contacts || ""}
                   name="contacts"
                   type="text"
                   placeholder="Enter contacts"
@@ -114,14 +115,18 @@ const EditPatientDetailModal = ({ show, handleClose, selectedPatient }) => {
                 <Form.Control
                   required
                   onChange={onInputChange}
-                  value={patientFormData?.date_of_birth || ''}
+                  value={patientFormData?.date_of_birth || ""}
                   name="date_of_birth"
                   type="text"
                   placeholder="Enter date of birth"
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit" disabled={isUpdatingPatient || isFectchingUpdate}>
+              <Button
+                variant="primary"
+                type="submit"
+                disabled={isUpdatingPatient || isFectchingUpdate}
+              >
                 {isUpdatingPatient || isFectchingUpdate ? (
                   <Spinner
                     as="span"

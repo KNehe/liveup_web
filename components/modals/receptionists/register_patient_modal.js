@@ -2,19 +2,22 @@ import { useState, useEffect } from "react";
 import { Button, Modal, Card, Form, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { registerPatient, getPatientsForRecep, resetRegisteringError } from '../../../features/patients/patientSlice'
+import {
+  registerPatient,
+  getPatientsForRecep,
+  resetRegisteringError,
+} from "../../../features/patients/patientSlice";
 
 const RegisterPatientDetailModal = ({ show, handleClose }) => {
+  const [patientFormData, setPatientFormData] = useState({
+    patient_name: "",
+    next_of_kin: "",
+    address: "",
+    contacts: "",
+    date_of_birth: "",
+  });
 
-  const [patientFormData, setPatientFormData] = useState(
-      {patient_name: "", 
-      next_of_kin: "" ,
-      address: '',
-      contacts: '',
-      date_of_birth: ''
-    });
-
-  const [isFectchingUpdate, setFetchingUpdate] = useState(false)
+  const [isFectchingUpdate, setFetchingUpdate] = useState(false);
 
   const {
     isRegisteringPatient,
@@ -23,26 +26,24 @@ const RegisterPatientDetailModal = ({ show, handleClose }) => {
     isRegisteringSuccess,
   } = useSelector((state) => state.patient);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  useEffect(()=>{
-    if (isRegisteringError){
-      toast.error(registeringMessage)
+  useEffect(() => {
+    if (isRegisteringError) {
+      toast.error(registeringMessage);
     }
-    dispatch(resetRegisteringError())
-  }, [isRegisteringError, registeringMessage])
+    dispatch(resetRegisteringError());
+  }, [isRegisteringError, registeringMessage]);
 
-  useEffect(()=>{
-    if (isRegisteringSuccess && !isRegisteringPatient && show){
-      setFetchingUpdate(true)
-      toast.info('Patient registered successfully')
-      setTimeout(()=>{
-        //Reload state with new data that includes updated patient
-        dispatch(getPatientsForRecep(null))
-        setFetchingUpdate(false)
-      }, 2000)
+  useEffect(() => {
+    if (isRegisteringSuccess && !isRegisteringPatient && show) {
+      setFetchingUpdate(true);
+      toast.info("Patient registered successfully");
+      //Reload state with new data that includes updated patient
+      dispatch(getPatientsForRecep(null));
+      setFetchingUpdate(false);
     }
-  }, [isRegisteringSuccess, isRegisteringPatient])
+  }, [isRegisteringSuccess, isRegisteringPatient]);
 
   const onInputChange = (e) => {
     setPatientFormData((previousState) => ({
@@ -53,7 +54,7 @@ const RegisterPatientDetailModal = ({ show, handleClose }) => {
 
   const onFormSubmitted = (e) => {
     e.preventDefault();
-    dispatch(registerPatient(patientFormData))
+    dispatch(registerPatient(patientFormData));
   };
 
   return (
@@ -125,7 +126,11 @@ const RegisterPatientDetailModal = ({ show, handleClose }) => {
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit" disabled={isRegisteringPatient || isFectchingUpdate}>
+              <Button
+                variant="primary"
+                type="submit"
+                disabled={isRegisteringPatient || isFectchingUpdate}
+              >
                 {isRegisteringPatient || isFectchingUpdate ? (
                   <Spinner
                     as="span"
