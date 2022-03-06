@@ -16,6 +16,10 @@ const initialState = {
   isRegisteringSuccess: false,
   isRegisteringError: false,
   registeringMessage: false,
+  isDeletingPatient: false,
+  isDeletingSuccess: false,
+  isDeletingError: false,
+  deletingMessage: false,
 };
 
 // get patients registered receptionist
@@ -78,6 +82,21 @@ export const registerPatient = createAsyncThunk(
   }
 );
 
+
+//delete patient
+export const deletePatient = createAsyncThunk(
+  "patients/delete",
+  async (patient_uri, thunkAPI) => {
+    try {
+      const accessToken = thunkAPI.getState().auth.authDetails.access_token;
+      return await patientService.deletePatient(accessToken, patient_uri);
+    } catch (error) {
+      const message = modifyResponseMessage(error)
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const patientSlice = createSlice({
   name: "patient",
   initialState,
@@ -85,6 +104,9 @@ export const patientSlice = createSlice({
     resetPatient: (state) => initialState,
     resetRegisteringError: (state) => {
       state.isRegisteringError = false
+    },
+    resetDeletingError: (state) => {
+      state.isDeletingError = false
     }
   },
   extraReducers: (builder) => {
@@ -130,8 +152,21 @@ export const patientSlice = createSlice({
         state.isRegisteringSuccess = false
         state.registeringMessage = action.payload
       })
+      .addCase(deletePatient.pending, (state) =>{
+        state.isDeletingPatient = true
+      })
+      .addCase(deletePatient.fulfilled, (state, action) => {
+        state.isDeletingPatient = false
+        state.isDeletingSuccess = true
+      })
+      .addCase(deletePatient.rejected, (state, action) => {
+        state.isDeletingPatient = false
+        state.isDeletingError = true
+        state.isDeletingSuccess = false
+        state.deletingMessage = action.payload
+      })
   },
 });
 
-export const { resetPatient, resetRegisteringError } = patientSlice.actions;
+export const { resetPatient, resetRegisteringError, resetDeletingError } = patientSlice.actions;
 export default patientSlice.reducer;

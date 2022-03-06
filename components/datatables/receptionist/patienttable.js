@@ -6,6 +6,8 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import PatientDetailModal from "../../modals/receptionists/patient_detail_modal";
 import EditPatientDetailModal from "../../modals/receptionists/edit_patient_detail_modal";
 import RegisterPatientModal from "../../modals/receptionists/register_patient_modal";
+import DeletePatientModal from "../../modals/receptionists/delete_patient_modal";
+
 
 const RegisteredPatientsTable = ({ data }) => {
   // Doing this because redux-toolkit applies object.freeze() on data
@@ -15,6 +17,7 @@ const RegisteredPatientsTable = ({ data }) => {
   const [showPatientDetailModal, setPatientDetailModal] = useState(false);
   const [showEditDetailModal, setEditDetailModal] = useState(false);
   const [showAddPatientModal, setAddPatientModal] = useState(false);
+  const [showDeletePatientModal, setDeletePatientModal] = useState(false);
 
   const [selectedPatient, setSelectedPatient] = useState(null);
 
@@ -26,8 +29,12 @@ const RegisteredPatientsTable = ({ data }) => {
     setEditDetailModal(false);
   };
 
-  const handleAddModal = () => {
+  const handleCloseAddModal = () => {
     setAddPatientModal(false);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeletePatientModal(false);
   };
 
   const columns = [
@@ -57,6 +64,14 @@ const RegisteredPatientsTable = ({ data }) => {
         setSelectedPatient(rowData);
         setPatientDetailModal(true);
       },
+    },
+      {
+        icon: tableIcons.Delete,
+        tooltip: "Delete patient",
+        onClick: (event, rowData) => {
+          setSelectedPatient(rowData);
+          setDeletePatientModal(true);
+        },
     },
   ];
 
@@ -110,7 +125,14 @@ const RegisteredPatientsTable = ({ data }) => {
       {/* Regsiter Patient  Modal */}
       <RegisterPatientModal
         show={showAddPatientModal}
-        handleClose={handleAddModal}
+        handleClose={handleCloseAddModal}
+      />
+
+      {/* Delete patient modal */}
+      <DeletePatientModal
+      show={showDeletePatientModal}
+      handleClose={handleCloseDeleteModal}
+      selectedPatient={selectedPatient}
       />
     </>
   );

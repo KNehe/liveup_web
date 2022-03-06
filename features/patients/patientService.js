@@ -40,11 +40,23 @@ const registerPatient = async (accessToken, patientDetails) => {
     return response.data
 }
 
+const deletePatient = async (accessToken, patient_uri) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    }
+    const response = await axios.delete(patient_uri, config)
+
+    return response.data
+}
+
 
 const patientService = {
     getPatientsRegisteredByReceptionist,
     updatePatientDetails,
     registerPatient,
+    deletePatient,
 }
 
 export default patientService
