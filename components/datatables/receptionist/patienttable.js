@@ -3,20 +3,24 @@ import MaterialTable from "material-table";
 import { useState } from "react";
 
 import PatientDetailModal from "../../modals/receptionists/patient_detail_modal";
+import EditPatientDetailModal from "../../modals/receptionists/edit_patient_detail_modal";
 
 const RegisteredPatientsTable = ({ data }) => {
+  // Doing this because redux-toolkit applies object.freeze() on data
+  // and can't modify object
   const patientData = data.map((o) => ({ ...o }));
 
   const [showPatientDetailModal, setPatientDetailModal] = useState(false);
+  const [showEditDetailModal, setEditDetailModal] = useState(false);
 
   const [selectedPatient, setSelectedPatient] = useState(null);
 
-  const handleShowPatientDetailModal = () => {
-    setPatientDetailModal(true);
-  };
-
   const handleClosePatientDetailModal = () => {
     setPatientDetailModal(false);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditDetailModal(false);
   };
 
   const columns = [
@@ -29,7 +33,10 @@ const RegisteredPatientsTable = ({ data }) => {
     {
       icon: tableIcons.Edit,
       tooltip: "Modify patient data",
-      onClick: (event, rowData) => alert("You saved " + rowData.patient_name),
+      onClick: (event, rowData) => {
+        setSelectedPatient(rowData);
+        setEditDetailModal(true);
+      },
     },
     {
       icon: tableIcons.Send,
@@ -48,6 +55,7 @@ const RegisteredPatientsTable = ({ data }) => {
 
   return (
     <>
+    {/* Registered Patients Data Table */}
       <div style={{ maxWidth: "100%" }}>
         <MaterialTable
           icons={tableIcons}
@@ -65,11 +73,18 @@ const RegisteredPatientsTable = ({ data }) => {
           }}
         />
       </div>
+
       {/* Patient Detail Modal */}
       <PatientDetailModal
         show={showPatientDetailModal}
         handleClose={handleClosePatientDetailModal}
-        handleShow={handleClosePatientDetailModal}
+        selectedPatient={selectedPatient}
+      />
+
+      {/* Edit Patient Detail Modal */}
+      <EditPatientDetailModal
+        show={showEditDetailModal}
+        handleClose={handleCloseEditModal}
         selectedPatient={selectedPatient}
       />
     </>

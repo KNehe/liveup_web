@@ -35,17 +35,15 @@ const Index = () => {
       </Head>
       <div style={{ marginTop: "20vh" }}></div>
       <Container>
-        {isLoadingPatients ? (
+        {isLoadingPatients || !isSuccess ? (
           <Spinner
             as="span"
             animation="border"
             role="status"
             aria-hidden="true"
           />
-        ) : isSuccess && patients[0]?.count > 0 ? (
-          <RegisteredPatientsTable data={patients[0].results}/>
         ) : (
-          <h3>You have not registered any patient</h3>
+          <RegisteredPatientsTable data={patients[0].results} />
         )}
       </Container>
     </>

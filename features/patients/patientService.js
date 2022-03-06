@@ -16,9 +16,22 @@ const getPatientsRegisteredByReceptionist = async (url, accessToken) => {
     return response.data
 }
 
+const updatePatientDetails = async (accessToken, patientUri, patientDetails) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    }
+
+    const response = await axios.patch(patientUri, patientDetails, config)
+
+    return response.data
+}
+
 
 const patientService = {
-    getPatientsRegisteredByReceptionist
+    getPatientsRegisteredByReceptionist,
+    updatePatientDetails,
 }
 
 export default patientService
