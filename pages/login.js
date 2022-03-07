@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login, reset } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
-import withAuthPage from "../hoc/auth/withAuthPage";
 import { useNavigator } from "../hooks/hooks";
 import { useRouter } from "next/router";
 
@@ -20,23 +19,25 @@ const Login = () => {
 
   const dispatch = useDispatch();
 
-  const router =  useRouter()
+  const router = useRouter();
 
   const { authDetails, isLoading, isSuccess, isError, message } = useSelector(
     (state) => state.auth
   );
-  
+
+  useEffect(() => {
+    if (isSuccess || authDetails) {
+      useNavigator(router, authDetails)
+    }
+  }, [authDetails, isSuccess]);
+
   useEffect(() => {
     if (isError) {
       toast.error(message);
     }
 
-    if (authDetails || isSuccess) {
-      useNavigator(router, authDetails)
-    }
-
     dispatch(reset());
-  }, [isError, isSuccess, authDetails, message]);
+  }, [isError, message]);
 
   const onInputChange = (e) => {
     setForm((previousState) => ({
@@ -56,7 +57,7 @@ const Login = () => {
   return (
     <Container>
       <Row className="mx-auto">
-        <Col lg={6} md={8} sm={10}className="mx-auto">
+        <Col lg={6} md={8} sm={10} className="mx-auto">
           <Card className="p-3">
             <Form onSubmit={onLoginFormSubmitted}>
               <Form.Group className="mb-4" controlId="email">
@@ -104,4 +105,4 @@ const Login = () => {
   );
 };
 
-export default  withAuthPage(Login);
+export default Login;

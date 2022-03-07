@@ -44,7 +44,10 @@ export const authSlice = createSlice({
             state.isSuccess = false,
             state.isLoading = false,
             state.message = ''
-        }
+        },
+        resetAuthDetails: (state) => {
+            state.authDetails = null
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -68,5 +71,5 @@ export const authSlice = createSlice({
     }
 })
 
-export const { reset } = authSlice.actions
+export const { reset, resetAuthDetails } = authSlice.actions
 export default authSlice.reducer
