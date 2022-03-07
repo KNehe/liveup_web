@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { setCurrentPageUri } from "../../../features/pages/pageSlice";
 import {
   deletePatient,
   getPatientsForRecep,
@@ -49,6 +50,11 @@ const DeletePatientDetailModal = ({ show, handleClose, selectedPatient }) => {
       dispatch(getPatientsForRecep(null));
       setFetchingUpdate(false);
       dispatch(getReceptionistStats());
+
+      // Data can be less and hence fewer pages
+      // reset pagination - null means it will default to first page
+      dispatch(setCurrentPageUri(null))
+      localStorage.setItem("currentPageUri", null);
     }
   }, [isDeletingSuccess, isDeletingPatient]);
 

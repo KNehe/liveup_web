@@ -8,9 +8,12 @@ const getPatientsRegisteredByReceptionist = async (url, accessToken) => {
             Authorization: `Bearer ${accessToken}`,
         },
     }
-    
-    const api_url = url ? url : API_URL + 'receptionist-patients/'
-    
+    let api_url;
+    if (url && url !== 'null') {
+        api_url = url
+    } else {
+        api_url = API_URL + 'receptionist-patients/'
+    }
     const response = await axios.get(api_url, config)
 
     return response.data

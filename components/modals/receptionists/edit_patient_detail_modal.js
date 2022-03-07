@@ -19,6 +19,8 @@ const EditPatientDetailModal = ({ show, handleClose, selectedPatient }) => {
     isUpdatingPatientSuccess,
   } = useSelector((state) => state.patient);
 
+  const { currentPageUri } = useSelector((state) => state.page);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,8 +38,9 @@ const EditPatientDetailModal = ({ show, handleClose, selectedPatient }) => {
       setFetchingUpdate(true);
       toast.info("Patient Details modified successfully");
       //Reload state with new data that includes updated patient
-      dispatch(getPatientsForRecep(null));
+      dispatch(getPatientsForRecep(currentPageUri));
       setFetchingUpdate(false);
+      handleClose()
     }
   }, [isUpdatingPatientSuccess, isUpdatingPatient]);
 
