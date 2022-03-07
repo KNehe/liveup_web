@@ -15,6 +15,7 @@ import {
   deletePatient,
   getPatientsForRecep,
 } from "../../../features/patients/patientSlice";
+import { getReceptionistStats } from "../../../features/stats/statSlice";
 
 const DeletePatientDetailModal = ({ show, handleClose, selectedPatient }) => {
   const [patientFormData, setPatientFormData] = useState(selectedPatient);
@@ -47,6 +48,7 @@ const DeletePatientDetailModal = ({ show, handleClose, selectedPatient }) => {
       //Reload state with new data that includes updated patient
       dispatch(getPatientsForRecep(null));
       setFetchingUpdate(false);
+      dispatch(getReceptionistStats());
     }
   }, [isDeletingSuccess, isDeletingPatient]);
 

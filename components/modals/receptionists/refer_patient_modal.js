@@ -3,13 +3,9 @@ import { Button, Modal, Card, Form, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { getClinicians } from "../../../features/clinicians/clinicianSlice";
-import {
-  getPatientsForRecep,
-} from "../../../features/patients/patientSlice";
-import {
-  referPatient,
-} from "../../../features/referrals/refferralSlice";
-
+import { getPatientsForRecep } from "../../../features/patients/patientSlice";
+import { referPatient } from "../../../features/referrals/refferralSlice";
+import { getReceptionistStats } from "../../../features/stats/statSlice";
 
 const ReferPatientModal = ({ show, handleClose, selectedPatient }) => {
   const [patientFormData, setPatientFormData] = useState(selectedPatient);
@@ -22,7 +18,7 @@ const ReferPatientModal = ({ show, handleClose, selectedPatient }) => {
     loadingCliniciansMessage,
   } = useSelector((state) => state.clinician);
 
-  const  {
+  const {
     isReferringError,
     isReferringSuccess,
     isReferring,
@@ -45,7 +41,8 @@ const ReferPatientModal = ({ show, handleClose, selectedPatient }) => {
   useEffect(() => {
     if (isReferringSuccess && !isReferring && show) {
       toast.info(`Patient referred successfully`);
-      handleClose()
+      dispatch(getReceptionistStats());
+      handleClose();
     }
   }, [isReferringSuccess, isReferring]);
 
@@ -59,10 +56,9 @@ const ReferPatientModal = ({ show, handleClose, selectedPatient }) => {
   const onFormSubmitted = (e) => {
     e.preventDefault();
 
-    if (!patientFormData?.doctor || patientFormData?.doctor === 'default')
-    {
-      toast.error('Choose a clinician')
-      return
+    if (!patientFormData?.doctor || patientFormData?.doctor === "default") {
+      toast.error("Choose a clinician");
+      return;
     }
 
     const requestPayload = {
@@ -106,10 +102,12 @@ const ReferPatientModal = ({ show, handleClose, selectedPatient }) => {
                         size="md"
                         aria-label="Select a doctor"
                         onChange={onInputChange}
-                        name='doctor'
+                        name="doctor"
                         required
                       >
-                        <option selected defaultValue="default">Select a clinician</option>
+                        <option selected defaultValue="default">
+                          Select a clinician
+                        </option>
                         {formSelectOptions}
                       </Form.Select>
                     </>
@@ -117,11 +115,7 @@ const ReferPatientModal = ({ show, handleClose, selectedPatient }) => {
                 </>
               </Form.Group>
 
-              <Button
-                variant="primary"
-                type="submit"
-                disabled={isReferring}
-              >
+              <Button variant="primary" type="submit" disabled={isReferring}>
                 {isReferring ? (
                   <Spinner
                     as="span"

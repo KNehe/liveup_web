@@ -7,6 +7,7 @@ import {
   getPatientsForRecep,
   resetRegisteringError,
 } from "../../../features/patients/patientSlice";
+import { getReceptionistStats } from "../../../features/stats/statSlice";
 
 const RegisterPatientDetailModal = ({ show, handleClose }) => {
   const [patientFormData, setPatientFormData] = useState({
@@ -42,6 +43,7 @@ const RegisterPatientDetailModal = ({ show, handleClose }) => {
       //Reload state with new data that includes updated patient
       dispatch(getPatientsForRecep(null));
       setFetchingUpdate(false);
+      dispatch(getReceptionistStats());
     }
   }, [isRegisteringSuccess, isRegisteringPatient]);
 
