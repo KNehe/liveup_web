@@ -7,7 +7,7 @@ import PatientDetailModal from "../../modals/receptionists/patient_detail_modal"
 import EditPatientDetailModal from "../../modals/receptionists/edit_patient_detail_modal";
 import RegisterPatientModal from "../../modals/receptionists/register_patient_modal";
 import DeletePatientModal from "../../modals/receptionists/delete_patient_modal";
-
+import ReferPatientModal from "../../modals/receptionists/refer_patient_modal";
 
 const RegisteredPatientsTable = ({ data }) => {
   // Doing this because redux-toolkit applies object.freeze() on data
@@ -18,6 +18,7 @@ const RegisteredPatientsTable = ({ data }) => {
   const [showEditDetailModal, setEditDetailModal] = useState(false);
   const [showAddPatientModal, setAddPatientModal] = useState(false);
   const [showDeletePatientModal, setDeletePatientModal] = useState(false);
+  const [showReferPatientModal, setReferPatientModal] = useState(false);
 
   const [selectedPatient, setSelectedPatient] = useState(null);
 
@@ -37,6 +38,10 @@ const RegisteredPatientsTable = ({ data }) => {
     setDeletePatientModal(false);
   };
 
+  const handleCloseReferModal = () => {
+    setReferPatientModal(false)
+  }
+
   const columns = [
     { title: "Patient Number", field: "patient_number" },
     { title: "Patient Name", field: "patient_name" },
@@ -55,7 +60,10 @@ const RegisteredPatientsTable = ({ data }) => {
     {
       icon: tableIcons.Send,
       tooltip: "Refer patient",
-      onClick: (event, rowData) => alert("You saved " + rowData.patient_name),
+      onClick: (event, rowData) => {
+        setSelectedPatient(rowData)
+        setReferPatientModal(true)
+      },
     },
     {
       icon: tableIcons.DetailPanel,
@@ -65,13 +73,13 @@ const RegisteredPatientsTable = ({ data }) => {
         setPatientDetailModal(true);
       },
     },
-      {
-        icon: tableIcons.Delete,
-        tooltip: "Delete patient",
-        onClick: (event, rowData) => {
-          setSelectedPatient(rowData);
-          setDeletePatientModal(true);
-        },
+    {
+      icon: tableIcons.Delete,
+      tooltip: "Delete patient",
+      onClick: (event, rowData) => {
+        setSelectedPatient(rowData);
+        setDeletePatientModal(true);
+      },
     },
   ];
 
@@ -130,9 +138,16 @@ const RegisteredPatientsTable = ({ data }) => {
 
       {/* Delete patient modal */}
       <DeletePatientModal
-      show={showDeletePatientModal}
-      handleClose={handleCloseDeleteModal}
-      selectedPatient={selectedPatient}
+        show={showDeletePatientModal}
+        handleClose={handleCloseDeleteModal}
+        selectedPatient={selectedPatient}
+      />
+
+      {/* Delete patient modal */}
+      <ReferPatientModal
+        show={showReferPatientModal}
+        handleClose={handleCloseReferModal}
+        selectedPatient={selectedPatient}
       />
     </>
   );
