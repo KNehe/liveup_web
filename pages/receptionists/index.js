@@ -37,7 +37,7 @@ const Index = () => {
   useEffect(() => {
     setFirstPageLoad(true)
     dispatch(setCurrentPageUri(null))
-    localStorage.setItem("currentPageUri", null);
+    localStorage.removeItem("currentPageUri");
     dispatch(getPatientsForRecep(currentPageUri));
     dispatch(getReceptionistStats());
   }, []);
@@ -45,7 +45,7 @@ const Index = () => {
   const handleSetCurrentPageUri = (e, currentPageUri) => {
     e.preventDefault();
     setFirstPageLoad(false)
-    localStorage.setItem("currentPageUri", currentPageUri);
+    localStorage.removeItem("currentPageUri");
     dispatch(setCurrentPageUri(currentPageUri));
     dispatch(getPatientsForRecep(currentPageUri));
   };

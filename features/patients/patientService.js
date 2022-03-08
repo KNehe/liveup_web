@@ -9,7 +9,7 @@ const getPatientsRegisteredByReceptionist = async (url, accessToken) => {
         },
     }
     let api_url;
-    if (url && url !== 'null') {
+    if (url) {
         api_url = url
     } else {
         api_url = API_URL + 'receptionist-patients/'
