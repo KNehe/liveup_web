@@ -45,7 +45,7 @@ const Index = () => {
   const handleSetCurrentPageUri = (e, currentPageUri) => {
     e.preventDefault();
     setFirstPageLoad(false)
-    localStorage.removeItem("currentPageUri");
+    localStorage.setItem("currentPageUri", currentPageUri);
     dispatch(setCurrentPageUri(currentPageUri));
     dispatch(getPatientsForRecep(currentPageUri));
   };

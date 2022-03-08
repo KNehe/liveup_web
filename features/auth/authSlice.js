@@ -47,7 +47,6 @@ export const authSlice = createSlice({
         },
         resetAuthDetails: (state) => {
             state.authDetails = null
-            alert('after reset', JSON.stringify(state.authDetails))
         },
     },
     extraReducers: (builder) => {
