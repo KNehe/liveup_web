@@ -26,6 +26,7 @@ const verifyToken = async (token) => {
 
 const logout = () => {
   localStorage.removeItem("authDetails");
+  localStorage.setItem("currentPageUri", null)
   console.log("OUTER HERE");
 };
 
