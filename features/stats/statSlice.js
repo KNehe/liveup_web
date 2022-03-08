@@ -24,6 +24,19 @@ export const getReceptionistStats = createAsyncThunk(
   }
 );
 
+//Get clinician statistics
+export const getClinicianStats = createAsyncThunk(
+  "clinicians/stats",
+  async (_, thunkAPI) => {
+    try {
+      const accessToken = thunkAPI.getState().auth.authDetails.access_token;
+      return await statService.fetchClinicianStats(accessToken);
+    } catch (error) {
+      const statMessage = modifyResponseMessage(error);
+      return thunkAPI.rejectWithValue(statMessage);
+    }
+  }
+);
 export const statsSlice = createSlice({
   name: "stats",
   initialState,
@@ -44,6 +57,19 @@ export const statsSlice = createSlice({
         state.stats = action.payload;
       })
       .addCase(getReceptionistStats.rejected, (state, action) => {
+        state.isStatLoading = false;
+        state.isStatError = true;
+        state.statMessage = action.payload;
+      })
+      .addCase(getClinicianStats.pending, (state) => {
+        state.isStatLoading = true;
+      })
+      .addCase(getClinicianStats.fulfilled, (state, action) => {
+        state.isStatLoading = false;
+        state.isReferringSuccess = true;
+        state.stats = action.payload;
+      })
+      .addCase(getClinicianStats.rejected, (state, action) => {
         state.isStatLoading = false;
         state.isStatError = true;
         state.statMessage = action.payload;

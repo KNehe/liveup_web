@@ -14,8 +14,21 @@ const fetchReceptionistStats = async (accessToken) => {
   return response.data;
 };
 
+const fetchClinicianStats = async (accessToken) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  const response = await axios.get(`${API_URL}medics/stats/`, config);
+
+  return response.data;
+}
+
 const statService = {
   fetchReceptionistStats,
+  fetchClinicianStats,
 };
 
 export default statService;
