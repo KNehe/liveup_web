@@ -8,8 +8,8 @@ const modifyResponseMessage = (error) => {
     (error.response &&
       error.response.data &&
       error.response.data?.non_field_errors.join(" ")) ||
-    error.response.data.message ||
-    error.message ||
+    error.response?.data?.message ||
+    error?.message ||
     error.toString();
   return message;
 };

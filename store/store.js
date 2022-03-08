@@ -5,6 +5,7 @@ import clinicianReducer from '../features/clinicians/clinicianSlice'
 import referralReducer from '../features/referrals/refferralSlice'
 import statsRedcuer from '../features/stats/statSlice'
 import pageReducer from '../features/pages/pageSlice'
+import assignedPatientReducer from '../features/patients/assigned_patientsSlice'
 
 
 export const store =  configureStore({
@@ -15,5 +16,6 @@ export const store =  configureStore({
         referral: referralReducer,
         stat: statsRedcuer,
         page: pageReducer,
+        assigned: assignedPatientReducer
     }
 })
