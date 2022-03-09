@@ -14,9 +14,21 @@ const referPatient = async (accessToken, referral) => {
     return response.data
 }
 
+const updateReferral = async (accessToken, referralUri, referralData) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    }
+        
+    const response = await axios.patch(referralUri, referralData, config)
+
+    return response.data
+}
 
 const referralService = {
     referPatient,
+    updateReferral,
 }
 
 export default referralService

@@ -9,6 +9,10 @@ const initialState = {
   isReferringSuccess: false,
   isReferring: false,
   referringMessage: "",
+  isUpdatingReferral: false,
+  isUpdatingReferralError: false,
+  isUpdatingReferralSuccess: false,
+  isUpdatingReferralMessage: ''
 };
 
 
@@ -26,7 +30,22 @@ export const referPatient = createAsyncThunk(
   }
 );
 
-export const clinicianSlice = createSlice({
+// update referral
+export const updateReferral = createAsyncThunk(
+  "referral/update",
+  async (referalData, thunkAPI) => {
+    try {
+      const accessToken = thunkAPI.getState().auth.authDetails.access_token;
+      const {referralUri} = referalData
+      return await referralService.updateReferral(accessToken, referralUri, referalData);
+    } catch (error) {
+      const message = modifyResponseMessage(error)
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const referralSlice = createSlice({
   name: "clinician",
   initialState,
   reducers: {
@@ -53,8 +72,24 @@ export const clinicianSlice = createSlice({
         state.referringMessage = action.payload;
       })
 
+      .addCase(updateReferral.pending, (state) => {
+        state.isUpdatingReferral = true;
+      })
+      .addCase(updateReferral.fulfilled, (state, action) => {
+        state.isUpdatingReferral = false;
+        state.isUpdatingReferralSuccess = true;
+        // reset to empty and push
+        state.singleReferral = []
+        state.singleReferral.push(action.payload);
+      })
+      .addCase(updateReferral.rejected, (state, action) => {
+        state.isUpdatingReferral = false;
+        state.isUpdatingReferralError = true;
+        state.isUpdatingReferralMessage = action.payload;
+      })
+
   },
 });
 
-export const { resetLoadingCliniciansError, resetClinician } = clinicianSlice.actions;
-export default clinicianSlice.reducer;
+export const { resetLoadingCliniciansError, resetClinician } = referralSlice.actions;
+export default referralSlice.reducer;

@@ -4,6 +4,7 @@ import { tableIcons } from "../tableicons";
 import MaterialTable from "material-table";
 import ViewPatientDetailsModal from "../../modals/clinicians/view_details_modal";
 import { useState } from "react";
+import AdmitPatientModal from "../../modals/clinicians/admit_patient_modal";
 
 const AssignedPatientsTable = ({ data }) => {
   // Doing this because redux-toolkit applies object.freeze() on data
@@ -12,10 +13,17 @@ const AssignedPatientsTable = ({ data }) => {
 
   const [showDetailModal, setShowDetailModal] = useState(false);
 
+  const [showAdmitModal, setShowAdmitModal] = useState(false);
+
   const [selection, setSelection] = useState(null);
 
   const handleCloseDetailModal = () => {
     setShowDetailModal(false);
+    setSelection(null);
+  };
+
+  const handleCloseAdmitModal = () => {
+    setShowAdmitModal(false);
     setSelection(null);
   };
 
@@ -32,7 +40,8 @@ const AssignedPatientsTable = ({ data }) => {
       icon: tableIcons.Admit,
       tooltip: "Admit patient",
       onClick: (event, rowData) => {
-        alert("haha");
+        setSelection(rowData);
+        setShowAdmitModal(true);
       },
     },
     {
@@ -82,6 +91,13 @@ const AssignedPatientsTable = ({ data }) => {
       <ViewPatientDetailsModal
         show={showDetailModal}
         handleClose={handleCloseDetailModal}
+        selection={selection}
+      />
+
+      {/* Admit Patient Modal */}
+      <AdmitPatientModal
+        show={showAdmitModal}
+        handleClose={handleCloseAdmitModal}
         selection={selection}
       />
     </>

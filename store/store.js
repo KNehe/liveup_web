@@ -6,6 +6,8 @@ import referralReducer from '../features/referrals/refferralSlice'
 import statsRedcuer from '../features/stats/statSlice'
 import pageReducer from '../features/pages/pageSlice'
 import assignedPatientReducer from '../features/patients/assigned_patientsSlice'
+import wardReducer from '../features/wards/wardSlice'
+import admissionReducer from '../features/admissions/admissionSlice'
 
 
 export const store =  configureStore({
@@ -16,6 +18,8 @@ export const store =  configureStore({
         referral: referralReducer,
         stat: statsRedcuer,
         page: pageReducer,
-        assigned: assignedPatientReducer
+        assigned: assignedPatientReducer,
+        ward: wardReducer,
+        admit: admissionReducer
     }
 })
