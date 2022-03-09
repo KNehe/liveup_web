@@ -5,6 +5,7 @@ import MaterialTable from "material-table";
 import ViewPatientDetailsModal from "../../modals/clinicians/view_details_modal";
 import { useState } from "react";
 import AdmitPatientModal from "../../modals/clinicians/admit_patient_modal";
+import PrescribeModal from "../../modals/clinicians/prescribe_modal";
 
 const AssignedPatientsTable = ({ data }) => {
   // Doing this because redux-toolkit applies object.freeze() on data
@@ -15,6 +16,8 @@ const AssignedPatientsTable = ({ data }) => {
 
   const [showAdmitModal, setShowAdmitModal] = useState(false);
 
+  const [showPrescribeModal, setShowPrescribeModal] = useState(false);
+
   const [selection, setSelection] = useState(null);
 
   const handleCloseDetailModal = () => {
@@ -24,6 +27,11 @@ const AssignedPatientsTable = ({ data }) => {
 
   const handleCloseAdmitModal = () => {
     setShowAdmitModal(false);
+    setSelection(null);
+  };
+
+  const handleClosePrescribeModal = () => {
+    setShowPrescribeModal(false);
     setSelection(null);
   };
 
@@ -48,7 +56,8 @@ const AssignedPatientsTable = ({ data }) => {
       icon: tableIcons.Prescribe,
       tooltip: "Prescribe",
       onClick: (event, rowData) => {
-        alert("haha");
+        setShowPrescribeModal(true);
+        setSelection(rowData);
       },
     },
     {
@@ -98,6 +107,12 @@ const AssignedPatientsTable = ({ data }) => {
       <AdmitPatientModal
         show={showAdmitModal}
         handleClose={handleCloseAdmitModal}
+        selection={selection}
+      />
+
+      <PrescribeModal
+        show={showPrescribeModal}
+        handleClose={handleClosePrescribeModal}
         selection={selection}
       />
     </>

@@ -8,6 +8,7 @@ import pageReducer from '../features/pages/pageSlice'
 import assignedPatientReducer from '../features/patients/assigned_patientsSlice'
 import wardReducer from '../features/wards/wardSlice'
 import admissionReducer from '../features/admissions/admissionSlice'
+import prescriptionReducer from '../features/prescriptions/prescriptionSlice'
 
 
 export const store =  configureStore({
@@ -20,6 +21,7 @@ export const store =  configureStore({
         page: pageReducer,
         assigned: assignedPatientReducer,
         ward: wardReducer,
-        admit: admissionReducer
+        admit: admissionReducer,
+        prescribe: prescriptionReducer,
     }
 })
