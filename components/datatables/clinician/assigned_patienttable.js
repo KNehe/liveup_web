@@ -8,6 +8,7 @@ import AdmitPatientModal from "../../modals/clinicians/admit_patient_modal";
 import PrescribeModal from "../../modals/clinicians/prescribe_modal";
 import ViewPatientHistoryModal from "../../modals/clinicians/history_modal";
 import EditAdmissionModal from "../../modals/clinicians/edit_admission";
+import EditPrescriptionModal from "../../modals/clinicians/edit_prescription_modal";
 
 const AssignedPatientsTable = ({ data }) => {
   // Doing this because redux-toolkit applies object.freeze() on data
@@ -28,6 +29,11 @@ const AssignedPatientsTable = ({ data }) => {
 
   const [selectedAdmission, setSelectedAdmission] = useState(null);
 
+  const [selectedPrescription, setSelectedPrescription] = useState(null);
+
+  const [showEditPrescriptionModal, setShowEditPrescriptionModal] =
+    useState(false);
+
   const handleCloseDetailModal = () => {
     setShowDetailModal(false);
     setSelection(null);
@@ -46,7 +52,7 @@ const AssignedPatientsTable = ({ data }) => {
   const handleCloseEditAdmissionModal = () => {
     setShowEditAdmissionModal(false);
     setSelection(null);
-    setSelectedAdmission(null)
+    setSelectedAdmission(null);
   };
 
   const handleCloseHistoryModal = () => {
@@ -56,8 +62,20 @@ const AssignedPatientsTable = ({ data }) => {
 
   const onEditAdmissionBtnHandler = (e, selectedAdmission) => {
     setShowHistoryModal(false);
-    setSelectedAdmission(selectedAdmission)
+    setSelectedAdmission(selectedAdmission);
     setShowEditAdmissionModal(true);
+  };
+
+  const onEditPrescriptionBtnClickedHandler = (e, selectedPrescription) => {
+    setShowHistoryModal(false);
+    setSelectedPrescription(selectedPrescription);
+    setShowEditPrescriptionModal(true);
+  };
+
+  const handleCloseEditPrescriptionModal = () => {
+    setShowEditPrescriptionModal(false);
+    setSelection(null);
+    setSelectedPrescription(null);
   };
 
   const actions = [
@@ -147,7 +165,8 @@ const AssignedPatientsTable = ({ data }) => {
         handleClose={handleCloseHistoryModal}
         show={showHistoryModal}
         selection={selection}
-        onEditBtnClick={onEditAdmissionBtnHandler}
+        onEditAdmissionBtnClick={onEditAdmissionBtnHandler}
+        onEditPrescriptionBtnClicked={onEditPrescriptionBtnClickedHandler}
       />
 
       {/* Edit Admission Modal */}
@@ -155,6 +174,13 @@ const AssignedPatientsTable = ({ data }) => {
         show={showEditAdmitModal}
         handleClose={handleCloseEditAdmissionModal}
         selectedAdmission={selectedAdmission}
+      />
+
+      {/* Edit Prescription Modal */}
+      <EditPrescriptionModal
+        show={showEditPrescriptionModal}
+        handleClose={handleCloseEditPrescriptionModal}
+        selection={selectedPrescription}
       />
     </>
   );

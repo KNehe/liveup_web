@@ -1,6 +1,6 @@
 import { Button, Row, Card } from "react-bootstrap";
 
-const PrescriptionCard = ({ item, authDetails }) => {
+const PrescriptionCard = ({ item, authDetails, onEditBtnClicked }) => {
   return (
     <Row>
       <Card className="p-4 mt-2">
@@ -41,8 +41,8 @@ const PrescriptionCard = ({ item, authDetails }) => {
           <b>Last updated by: </b>{" "}
           {item?.updated_by ? (
             <>
-              {new Date(item?.updated_by?.first_name).toLocaleDateString()}{" "}
-              {new Date(item?.updated_at?.last_name).toLocaleTimeString()}
+              {item?.updated_by?.first_name}{" "}
+              {item?.updated_at?.last_name}
             </>
           ) : (
             "Not updated yet"
@@ -62,7 +62,7 @@ const PrescriptionCard = ({ item, authDetails }) => {
 
         {item.created_by.email === authDetails.user.email ? (
           <p>
-            <Button variant="success">Edit</Button>
+            <Button variant="success" onClick={(e, d) => onEditBtnClicked(e, item)}>Edit</Button>
           </p>
         ) : (
           ""

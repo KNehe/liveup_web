@@ -10,6 +10,11 @@ const initialState = {
   isLoadingPrescSuccess: false,
   isLoadingPresc: false,
   isLoadingPrescMessage: "",
+
+  isUpdatingPrescError: false,
+  isUpdatingPrescSuccess: false,
+  isUpdatingPresc: false,
+  isUpdatingPrescMessage: "",
 };
 
 
@@ -42,6 +47,20 @@ export const getPrescriptions = createAsyncThunk(
   }
 );
 
+// update a prescription
+export const updatePrescription = createAsyncThunk(
+  "prescribe/update",
+  async (data, thunkAPI) => {
+    try {
+      const accessToken = thunkAPI.getState().auth.authDetails.access_token;
+      const {prescriptionUri} = data
+      return await prescriptionService.updatePrescription(accessToken, prescriptionUri, data);
+    } catch (error) {
+      const message = modifyResponseMessage(error)
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 export const prescriptionSlice = createSlice({
   name: "prescribe",
@@ -50,6 +69,9 @@ export const prescriptionSlice = createSlice({
     resetPrescState: (state) => initialState,
     resetLoadingPrescError: (state) => {
       state.isLoadingPrescError = false
+    },
+    resetUpdaingPrescError: (state) => {
+      state.isUpdatingPrescError = false
     },
   },
   extraReducers: (builder) => {
@@ -84,9 +106,24 @@ export const prescriptionSlice = createSlice({
         state.isLoadingPrescError = true;
         state.isLoadingPrescMessage = action.payload;
       })
+      .addCase(updatePrescription.pending, (state) => {
+        state.isUpdatingPresc = true;
+      })
+      .addCase(updatePrescription.fulfilled, (state, action) => {
+        state.isUpdatingPresc = false;
+        state.isUpdatingPrescSuccess = true;
+        // reset to empty and push
+        state.prescs = []
+        state.singlePresc.push(action.payload);
+      })
+      .addCase(updatePrescription.rejected, (state, action) => {
+        state.isUpdatingPresc = false;
+        state.isUpdatingPrescError = true;
+        state.isUpdatingPrescMessage = action.payload;
+      })
 
   },
 });
 
-export const { resetLoadingPrescError, resetPrescState } = prescriptionSlice.actions;
+export const { resetLoadingPrescError, resetPrescState, resetUpdaingPrescError } = prescriptionSlice.actions;
 export default prescriptionSlice.reducer;

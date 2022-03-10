@@ -1,12 +1,25 @@
 import { useEffect } from "react";
 import { Button, Modal, Card, Accordion } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getAdmissions } from "../../../features/admissions/admissionSlice";
-import { getPrescriptions } from "../../../features/prescriptions/prescriptionSlice";
+import { toast } from "react-toastify";
+import {
+  getAdmissions,
+  resetLoadingAdmissionError,
+} from "../../../features/admissions/admissionSlice";
+import {
+  getPrescriptions,
+  resetLoadingPrescError,
+} from "../../../features/prescriptions/prescriptionSlice";
 import AdmissionHistoryCard from "./admission_history_card";
 import PrescriptionCard from "./prescription_card";
 
-const ViewPatientHistoryModal = ({ show, handleClose, selection, onEditBtnClick }) => {
+const ViewPatientHistoryModal = ({
+  show,
+  handleClose,
+  selection,
+  onEditAdmissionBtnClick,
+  onEditPrescriptionBtnClicked,
+}) => {
   const {
     prescs,
     isLoadingPrescError,
@@ -23,6 +36,22 @@ const ViewPatientHistoryModal = ({ show, handleClose, selection, onEditBtnClick 
     isLoadingAdmissionMessage,
   } = useSelector((state) => state.admit);
 
+  useEffect(() => {
+    if (isLoadingAdmissionError) {
+      toast.error(isLoadingAdmissionMessage);
+    }
+    if (isLoadingPrescError) {
+      toast.error(isLoadingPrescMessage);
+    }
+    resetLoadingAdmissionError();
+    resetLoadingPrescError();
+  }, [
+    isLoadingAdmissionError,
+    isLoadingPrescError,
+    isLoadingAdmissionMessage,
+    isLoadingAdmissionMessage,
+  ]);
+
   const { authDetails } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
@@ -31,6 +60,14 @@ const ViewPatientHistoryModal = ({ show, handleClose, selection, onEditBtnClick 
     if (selection && show) {
       fetchPrescriptions(selection?.patient?.url);
       fetchAdmissions(selection?.patient?.url);
+    }
+    // reset error to false if they exist
+    // to enable a clean slate
+    if (isLoadingAdmissionError) {
+      resetLoadingAdmissionError();
+    }
+    if (isLoadingPrescError) {
+      resetLoadingPrescError();
     }
   }, [selection, show]);
 
@@ -60,7 +97,7 @@ const ViewPatientHistoryModal = ({ show, handleClose, selection, onEditBtnClick 
           <Modal.Title>Patient History</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <h5>Patient Name: {selection?.patient?.patient_name}</h5>
+          <h5>Patient Name: {selection?.patient?.patient_name}</h5>
           <Accordion>
             {/* prescriptions */}
 
@@ -87,6 +124,7 @@ const ViewPatientHistoryModal = ({ show, handleClose, selection, onEditBtnClick 
                         key={i}
                         item={item}
                         authDetails={authDetails}
+                        onEditBtnClicked={onEditPrescriptionBtnClicked}
                       />
                     ))
                   )}
@@ -115,7 +153,7 @@ const ViewPatientHistoryModal = ({ show, handleClose, selection, onEditBtnClick 
                         key={i}
                         item={item}
                         authDetails={authDetails}
-                        onEditBtnClick={onEditBtnClick}
+                        onEditBtnClick={onEditAdmissionBtnClick}
                       />
                     ))
                   )}

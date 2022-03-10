@@ -27,9 +27,23 @@ const getPatientPrescriptions = async (accessToken, patient_id) => {
     return response.data
 }
 
+// update prescription
+const updatePrescription = async (accessToken, prescriptionUri, payload) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    }
+        
+    const response = await axios.patch(prescriptionUri, payload, config)
+
+    return response.data
+}
+
 const prescriptionService = {
     prescribe,
     getPatientPrescriptions,
+    updatePrescription,
 }
 
 export default prescriptionService
