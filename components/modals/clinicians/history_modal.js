@@ -5,10 +5,11 @@ import { toast } from "react-toastify";
 import {
   getAdmissions,
   resetLoadingAdmissionError,
+  resetLoadingHistoryAdmissionError,
 } from "../../../features/admissions/admissionSlice";
 import {
   getPrescriptions,
-  resetLoadingPrescError,
+  resetLoadingPrescriptionHistoryError,
 } from "../../../features/prescriptions/prescriptionSlice";
 import AdmissionHistoryCard from "./admission_history_card";
 import PrescriptionCard from "./prescription_card";
@@ -22,7 +23,7 @@ const ViewPatientHistoryModal = ({
 }) => {
   const {
     prescs,
-    isLoadingPrescError,
+    isLoadingPrescriptionHistoryError,
     isLoadingPrescSuccess,
     isLoadingPresc,
     isLoadingPrescMessage,
@@ -36,38 +37,20 @@ const ViewPatientHistoryModal = ({
     isLoadingAdmissionMessage,
   } = useSelector((state) => state.admit);
 
-  useEffect(() => {
-    if (isLoadingAdmissionError) {
-      toast.error(isLoadingAdmissionMessage);
-    }
-    if (isLoadingPrescError) {
-      toast.error(isLoadingPrescMessage);
-    }
-    resetLoadingAdmissionError();
-    resetLoadingPrescError();
-  }, [
-    isLoadingAdmissionError,
-    isLoadingPrescError,
-    isLoadingAdmissionMessage,
-    isLoadingAdmissionMessage,
-  ]);
+  const dispatch = useDispatch();
 
   const { authDetails } = useSelector((state) => state.auth);
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (selection && show) {
       fetchPrescriptions(selection?.patient?.url);
       fetchAdmissions(selection?.patient?.url);
     }
-    // reset error to false if they exist
-    // to enable a clean slate
     if (isLoadingAdmissionError) {
-      resetLoadingAdmissionError();
+      dispatch(resetLoadingHistoryAdmissionError());
     }
-    if (isLoadingPrescError) {
-      resetLoadingPrescError();
+    if (isLoadingPrescriptionHistoryError) {
+      dispatch(resetLoadingPrescriptionHistoryError());
     }
   }, [selection, show]);
 
@@ -110,7 +93,7 @@ const ViewPatientHistoryModal = ({
                 <Card className="p-4">
                   {isLoadingPresc ? (
                     <p className="text-info">Loading prescriptions...</p>
-                  ) : isLoadingPrescError ? (
+                  ) : isLoadingPrescriptionHistoryError ? (
                     <p className="text-danger">
                       An error occurred while Loading prescriptions
                     </p>

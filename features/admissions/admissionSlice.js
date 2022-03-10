@@ -21,7 +21,6 @@ const initialState = {
   isUpdatingAdmissionMessage: "",
 };
 
-
 // Admit a patient
 export const admitPatient = createAsyncThunk(
   "admit/patient",
@@ -30,12 +29,11 @@ export const admitPatient = createAsyncThunk(
       const accessToken = thunkAPI.getState().auth.authDetails.access_token;
       return await admitService.admitPatient(accessToken, data);
     } catch (error) {
-      const message = modifyResponseMessage(error)
+      const message = modifyResponseMessage(error);
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
-
 
 // Fetch a patient's admissions
 export const getAdmissions = createAsyncThunk(
@@ -45,12 +43,11 @@ export const getAdmissions = createAsyncThunk(
       const accessToken = thunkAPI.getState().auth.authDetails.access_token;
       return await admitService.getAdmissions(accessToken, patient_id);
     } catch (error) {
-      const message = modifyResponseMessage(error)
+      const message = modifyResponseMessage(error);
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
-
 
 // Update admission
 export const updateAdmission = createAsyncThunk(
@@ -58,15 +55,14 @@ export const updateAdmission = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const accessToken = thunkAPI.getState().auth.authDetails.access_token;
-      const {admissionUri} = data
+      const { admissionUri } = data;
       return await admitService.updateAmission(accessToken, admissionUri, data);
     } catch (error) {
-      const message = modifyResponseMessage(error)
+      const message = modifyResponseMessage(error);
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
-
 
 export const admissionSlice = createSlice({
   name: "admit",
@@ -74,7 +70,15 @@ export const admissionSlice = createSlice({
   reducers: {
     resetAdmissionState: (state) => initialState,
     resetLoadingAdmissionError: (state) => {
-      state.isAdmittingError = false
+      state.isAdmittingError = false;
+    },
+    resetAllErrors: (state) => {
+      state.isLoadingAdmissionError = false;
+      state.isAdmittingError = false;
+      state.isUpdatingAdmissionError = false;
+    },
+    resetLoadingHistoryAdmissionError: (state) => {
+      state.isLoadingAdmissionError = false;
     },
   },
   extraReducers: (builder) => {
@@ -86,7 +90,7 @@ export const admissionSlice = createSlice({
         state.isAdmitting = false;
         state.isAdmittingSuccess = true;
         // reset to empty and push
-        state.singleAdmission = []
+        state.singleAdmission = [];
         state.singleAdmission.push(...action.payload);
       })
       .addCase(admitPatient.rejected, (state, action) => {
@@ -101,7 +105,7 @@ export const admissionSlice = createSlice({
         state.isLoadingAdmission = false;
         state.isLoadingAdmissionSuccess = true;
         // reset to empty and push
-        state.admissions = []
+        state.admissions = [];
         state.admissions.push(...action.payload);
       })
       .addCase(getAdmissions.rejected, (state, action) => {
@@ -115,18 +119,24 @@ export const admissionSlice = createSlice({
       .addCase(updateAdmission.fulfilled, (state, action) => {
         state.isUpdatingAdmission = false;
         state.isUpdatingAdmissionSuccess = true;
+        // state.isUpdatingAdmissionError = true;
         // reset to empty and push
-        state.singleAdmission = []
+        state.singleAdmission = [];
         state.singleAdmission.push(action.payload);
       })
       .addCase(updateAdmission.rejected, (state, action) => {
         state.isUpdatingAdmission = false;
         state.isUpdatingAdmissionError = true;
         state.isUpdatingAdmissionMessage = action.payload;
-      })
-
+        state.admissions = [];
+        state.singleAdmission = [];
+      });
   },
 });
 
-export const { resetLoadingAdmissionError, resetAdmissionState } = admissionSlice.actions;
+export const {
+  resetLoadingAdmissionError,
+  resetAdmissionState,
+  resetLoadingHistoryAdmissionError,
+} = admissionSlice.actions;
 export default admissionSlice.reducer;

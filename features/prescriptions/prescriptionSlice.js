@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { modifyResponseMessage } from "../../utils/messages";
 import prescriptionService from "./prescriptionService";
 
-
 const initialState = {
   prescs: [],
   singlePresc: [],
@@ -15,8 +14,9 @@ const initialState = {
   isUpdatingPrescSuccess: false,
   isUpdatingPresc: false,
   isUpdatingPrescMessage: "",
-};
 
+  isLoadingPrescriptionHistoryError: false,
+};
 
 // Register all prescription
 export const registerPrescription = createAsyncThunk(
@@ -26,12 +26,11 @@ export const registerPrescription = createAsyncThunk(
       const accessToken = thunkAPI.getState().auth.authDetails.access_token;
       return await prescriptionService.prescribe(accessToken, payload);
     } catch (error) {
-      const message = modifyResponseMessage(error)
+      const message = modifyResponseMessage(error);
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
-
 
 // fetch all prescription
 export const getPrescriptions = createAsyncThunk(
@@ -39,9 +38,12 @@ export const getPrescriptions = createAsyncThunk(
   async (patient_id, thunkAPI) => {
     try {
       const accessToken = thunkAPI.getState().auth.authDetails.access_token;
-      return await prescriptionService.getPatientPrescriptions(accessToken, patient_id);
+      return await prescriptionService.getPatientPrescriptions(
+        accessToken,
+        patient_id
+      );
     } catch (error) {
-      const message = modifyResponseMessage(error)
+      const message = modifyResponseMessage(error);
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -53,10 +55,14 @@ export const updatePrescription = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const accessToken = thunkAPI.getState().auth.authDetails.access_token;
-      const {prescriptionUri} = data
-      return await prescriptionService.updatePrescription(accessToken, prescriptionUri, data);
+      const { prescriptionUri } = data;
+      return await prescriptionService.updatePrescription(
+        accessToken,
+        prescriptionUri,
+        data
+      );
     } catch (error) {
-      const message = modifyResponseMessage(error)
+      const message = modifyResponseMessage(error);
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -68,10 +74,13 @@ export const prescriptionSlice = createSlice({
   reducers: {
     resetPrescState: (state) => initialState,
     resetLoadingPrescError: (state) => {
-      state.isLoadingPrescError = false
+      state.isLoadingPrescError = false;
     },
     resetUpdaingPrescError: (state) => {
-      state.isUpdatingPrescError = false
+      state.isUpdatingPrescError = false;
+    },
+    resetLoadingPrescriptionHistoryError: (state) => {
+      state.isLoadingPrescriptionHistoryError = false;
     },
   },
   extraReducers: (builder) => {
@@ -83,7 +92,7 @@ export const prescriptionSlice = createSlice({
         state.isLoadingPresc = false;
         state.isLoadingPrescSuccess = true;
         // reset to empty and push
-        state.prescs = []
+        state.prescs = [];
         state.prescs.push(...action.payload);
       })
       .addCase(registerPrescription.rejected, (state, action) => {
@@ -98,13 +107,14 @@ export const prescriptionSlice = createSlice({
         state.isLoadingPresc = false;
         state.isLoadingPrescSuccess = true;
         // reset to empty and push
-        state.prescs = []
+        state.prescs = [];
         state.prescs.push(...action.payload);
       })
       .addCase(getPrescriptions.rejected, (state, action) => {
         state.isLoadingPresc = false;
-        state.isLoadingPrescError = true;
+        state.isLoadingPrescriptionHistoryError = true;
         state.isLoadingPrescMessage = action.payload;
+        state.prescs = [];
       })
       .addCase(updatePrescription.pending, (state) => {
         state.isUpdatingPresc = true;
@@ -113,17 +123,21 @@ export const prescriptionSlice = createSlice({
         state.isUpdatingPresc = false;
         state.isUpdatingPrescSuccess = true;
         // reset to empty and push
-        state.prescs = []
+        state.prescs = [];
         state.singlePresc.push(action.payload);
       })
       .addCase(updatePrescription.rejected, (state, action) => {
         state.isUpdatingPresc = false;
         state.isUpdatingPrescError = true;
         state.isUpdatingPrescMessage = action.payload;
-      })
-
+      });
   },
 });
 
-export const { resetLoadingPrescError, resetPrescState, resetUpdaingPrescError } = prescriptionSlice.actions;
+export const {
+  resetLoadingPrescError,
+  resetPrescState,
+  resetUpdaingPrescError,
+  resetLoadingPrescriptionHistoryError,
+} = prescriptionSlice.actions;
 export default prescriptionSlice.reducer;
