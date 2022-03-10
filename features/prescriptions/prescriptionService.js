@@ -14,9 +14,22 @@ const prescribe = async (accessToken, payload) => {
     return response.data
 }
 
+// Get prescriptions for a particular patient
+const getPatientPrescriptions = async (accessToken, patient_id) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    }
+        
+    const response = await axios.get(`${API_URL}prescriptions-info/?patient_id=${patient_id}`, config)
+
+    return response.data
+}
 
 const prescriptionService = {
     prescribe,
+    getPatientPrescriptions,
 }
 
 export default prescriptionService

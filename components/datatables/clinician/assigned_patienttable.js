@@ -6,6 +6,7 @@ import ViewPatientDetailsModal from "../../modals/clinicians/view_details_modal"
 import { useState } from "react";
 import AdmitPatientModal from "../../modals/clinicians/admit_patient_modal";
 import PrescribeModal from "../../modals/clinicians/prescribe_modal";
+import ViewPatientHistoryModal from "../../modals/clinicians/history_modal";
 
 const AssignedPatientsTable = ({ data }) => {
   // Doing this because redux-toolkit applies object.freeze() on data
@@ -17,6 +18,8 @@ const AssignedPatientsTable = ({ data }) => {
   const [showAdmitModal, setShowAdmitModal] = useState(false);
 
   const [showPrescribeModal, setShowPrescribeModal] = useState(false);
+
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
 
   const [selection, setSelection] = useState(null);
 
@@ -32,6 +35,11 @@ const AssignedPatientsTable = ({ data }) => {
 
   const handleClosePrescribeModal = () => {
     setShowPrescribeModal(false);
+    setSelection(null);
+  };
+
+  const handleCloseHistoryModal = () => {
+    setShowHistoryModal(false);
     setSelection(null);
   };
 
@@ -64,7 +72,8 @@ const AssignedPatientsTable = ({ data }) => {
       icon: tableIcons.History,
       tooltip: "history",
       onClick: (event, rowData) => {
-        alert("haha");
+        setSelection(rowData);
+        setShowHistoryModal(true);
       },
     },
   ];
@@ -113,6 +122,13 @@ const AssignedPatientsTable = ({ data }) => {
       <PrescribeModal
         show={showPrescribeModal}
         handleClose={handleClosePrescribeModal}
+        selection={selection}
+      />
+
+      {/* Patient History Modal */}
+      <ViewPatientHistoryModal
+        handleClose={handleCloseHistoryModal}
+        show={showHistoryModal}
         selection={selection}
       />
     </>
