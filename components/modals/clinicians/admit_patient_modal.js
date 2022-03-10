@@ -20,7 +20,6 @@ const AdmitPatientModal = ({ show, handleClose, selection }) => {
     isLoadingWard,
     isLoadingWardMessage,
   } = useSelector((state) => state.ward);
-  
 
   const {
     isAdmittingError,
@@ -33,7 +32,7 @@ const AdmitPatientModal = ({ show, handleClose, selection }) => {
     isUpdatingReferralSuccess,
     isUpdatingReferral,
     isUpdatingReferralError,
-    isUpdatingReferralMessage
+    isUpdatingReferralMessage,
   } = useSelector((state) => state.referral);
 
   const dispatch = useDispatch();
@@ -41,12 +40,13 @@ const AdmitPatientModal = ({ show, handleClose, selection }) => {
   const { currentPageUri } = useSelector((state) => state.page);
 
   useEffect(() => {
-    setPatientFormData(selection);
-    dispatch(getAllWards());
-  }, [selection]);
+    if (selection && show) {
+      setPatientFormData(selection);
+      dispatch(getAllWards());
+    }
+  }, [selection, show]);
 
-
-//   admissions
+  //   admissions
   useEffect(() => {
     if (isAdmittingError) {
       toast.error(isAdmittingMessage);
@@ -56,13 +56,12 @@ const AdmitPatientModal = ({ show, handleClose, selection }) => {
   useEffect(() => {
     if (isAdmittingSuccess && !isAdmitting && show) {
       toast.info(`Patient admitted successfully`);
-    dispatch(updateReferral(referalPayload))
+      dispatch(updateReferral(referalPayload));
     }
   }, [isAdmittingSuccess, isAdmitting]);
 
-
-//   referrals
-useEffect(() => {
+  //   referrals
+  useEffect(() => {
     if (isUpdatingReferralError) {
       toast.error(isUpdatingReferralMessage);
     }
@@ -72,12 +71,12 @@ useEffect(() => {
     if (isUpdatingReferralSuccess && !isUpdatingReferral && show) {
       toast.info(`Status changed to admitted`);
       dispatch(getClinicianStats());
-      dispatch(getAssignedPatients(currentPageUri))
+      dispatch(getAssignedPatients(currentPageUri));
       handleClose();
     }
   }, [isUpdatingReferralSuccess, isUpdatingReferral]);
 
-//   handlers
+  //   handlers
 
   const onInputChange = (e) => {
     setPatientFormData((previousState) => ({
@@ -100,11 +99,11 @@ useEffect(() => {
     };
 
     const referralPayload = {
-        status: 'Admitted',
-        referralUri: patientFormData.url,
-    }
-    setReferalPayload(referralPayload)
-    dispatch(admitPatient(admissionPayload))
+      status: "Admitted",
+      referralUri: patientFormData.url,
+    };
+    setReferalPayload(referralPayload);
+    dispatch(admitPatient(admissionPayload));
   };
 
   const formSelectOptions = wards[0]?.map((item, i) => {
@@ -153,8 +152,12 @@ useEffect(() => {
                 </>
               </Form.Group>
 
-              <Button variant="primary" type="submit" disabled={isAdmitting | isUpdatingReferral}>
-                {isAdmitting | isUpdatingReferral? (
+              <Button
+                variant="primary"
+                type="submit"
+                disabled={isAdmitting | isUpdatingReferral}
+              >
+                {isAdmitting | isUpdatingReferral ? (
                   <Spinner
                     as="span"
                     animation="border"
