@@ -9,10 +9,16 @@ const initialState = {
   isAdmittingSuccess: false,
   isAdmitting: false,
   isAdmittingMessage: "",
+
   isLoadingAdmissionError: false,
   isLoadingAdmissionSuccess: false,
   isLoadingAdmission: false,
   isLoadingAdmissionMessage: "",
+
+  isUpdatingAdmissionError: false,
+  isUpdatingAdmissionSuccess: false,
+  isUpdatingAdmission: false,
+  isUpdatingAdmissionMessage: "",
 };
 
 
@@ -38,6 +44,22 @@ export const getAdmissions = createAsyncThunk(
     try {
       const accessToken = thunkAPI.getState().auth.authDetails.access_token;
       return await admitService.getAdmissions(accessToken, patient_id);
+    } catch (error) {
+      const message = modifyResponseMessage(error)
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+
+// Update admission
+export const updateAdmission = createAsyncThunk(
+  "admit/update",
+  async (data, thunkAPI) => {
+    try {
+      const accessToken = thunkAPI.getState().auth.authDetails.access_token;
+      const {admissionUri} = data
+      return await admitService.updateAmission(accessToken, admissionUri, data);
     } catch (error) {
       const message = modifyResponseMessage(error)
       return thunkAPI.rejectWithValue(message);
@@ -86,6 +108,21 @@ export const admissionSlice = createSlice({
         state.isLoadingAdmission = false;
         state.isLoadingAdmissionError = true;
         state.isLoadingAdmissionMessage = action.payload;
+      })
+      .addCase(updateAdmission.pending, (state) => {
+        state.isUpdatingAdmission = true;
+      })
+      .addCase(updateAdmission.fulfilled, (state, action) => {
+        state.isUpdatingAdmission = false;
+        state.isUpdatingAdmissionSuccess = true;
+        // reset to empty and push
+        state.singleAdmission = []
+        state.singleAdmission.push(action.payload);
+      })
+      .addCase(updateAdmission.rejected, (state, action) => {
+        state.isUpdatingAdmission = false;
+        state.isUpdatingAdmissionError = true;
+        state.isUpdatingAdmissionMessage = action.payload;
       })
 
   },

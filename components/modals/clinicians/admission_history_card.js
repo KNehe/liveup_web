@@ -1,6 +1,7 @@
-import { Button, Modal, Row, Col, Card } from "react-bootstrap";
+import { Button, Row, Card } from "react-bootstrap";
 
-const AdmissionHistoryCard = ({ item, authDetails }) => {
+const AdmissionHistoryCard = ({ item, authDetails, onEditBtnClick }) => {
+
   return (
     <Row>
       <Card className="mt-2">
@@ -46,7 +47,7 @@ const AdmissionHistoryCard = ({ item, authDetails }) => {
 
         {item.created_by.email === authDetails.user.email ? (
           <p>
-            <Button variant="success">Edit</Button>
+            <Button variant="success" onClick={(e, d) => onEditBtnClick(e, item)}>Edit</Button>
           </p>
         ) : (
           ""

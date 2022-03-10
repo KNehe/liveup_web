@@ -27,9 +27,22 @@ const getAdmissions = async (accessToken, patient_id) => {
     return response.data
 }
 
+const updateAmission = async (accessToken, admissionUri, data) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    }
+        
+    const response = await axios.patch(admissionUri, data, config)
+
+    return response.data
+}
+
 const admitService = {
     admitPatient,
-    getAdmissions
+    getAdmissions,
+    updateAmission,
 }
 
 export default admitService

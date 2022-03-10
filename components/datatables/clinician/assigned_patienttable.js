@@ -7,6 +7,7 @@ import { useState } from "react";
 import AdmitPatientModal from "../../modals/clinicians/admit_patient_modal";
 import PrescribeModal from "../../modals/clinicians/prescribe_modal";
 import ViewPatientHistoryModal from "../../modals/clinicians/history_modal";
+import EditAdmissionModal from "../../modals/clinicians/edit_admission";
 
 const AssignedPatientsTable = ({ data }) => {
   // Doing this because redux-toolkit applies object.freeze() on data
@@ -21,7 +22,11 @@ const AssignedPatientsTable = ({ data }) => {
 
   const [showHistoryModal, setShowHistoryModal] = useState(false);
 
+  const [showEditAdmitModal, setShowEditAdmissionModal] = useState(false);
+
   const [selection, setSelection] = useState(null);
+
+  const [selectedAdmission, setSelectedAdmission] = useState(null);
 
   const handleCloseDetailModal = () => {
     setShowDetailModal(false);
@@ -38,9 +43,21 @@ const AssignedPatientsTable = ({ data }) => {
     setSelection(null);
   };
 
+  const handleCloseEditAdmissionModal = () => {
+    setShowEditAdmissionModal(false);
+    setSelection(null);
+    setSelectedAdmission(null)
+  };
+
   const handleCloseHistoryModal = () => {
     setShowHistoryModal(false);
     setSelection(null);
+  };
+
+  const onEditAdmissionBtnHandler = (e, selectedAdmission) => {
+    setShowHistoryModal(false);
+    setSelectedAdmission(selectedAdmission)
+    setShowEditAdmissionModal(true);
   };
 
   const actions = [
@@ -130,6 +147,14 @@ const AssignedPatientsTable = ({ data }) => {
         handleClose={handleCloseHistoryModal}
         show={showHistoryModal}
         selection={selection}
+        onEditBtnClick={onEditAdmissionBtnHandler}
+      />
+
+      {/* Edit Admission Modal */}
+      <EditAdmissionModal
+        show={showEditAdmitModal}
+        handleClose={handleCloseEditAdmissionModal}
+        selectedAdmission={selectedAdmission}
       />
     </>
   );

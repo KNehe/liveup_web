@@ -6,7 +6,7 @@ import { getPrescriptions } from "../../../features/prescriptions/prescriptionSl
 import AdmissionHistoryCard from "./admission_history_card";
 import PrescriptionCard from "./prescription_card";
 
-const ViewPatientHistoryModal = ({ show, handleClose, selection }) => {
+const ViewPatientHistoryModal = ({ show, handleClose, selection, onEditBtnClick }) => {
   const {
     prescs,
     isLoadingPrescError,
@@ -115,6 +115,7 @@ const ViewPatientHistoryModal = ({ show, handleClose, selection }) => {
                         key={i}
                         item={item}
                         authDetails={authDetails}
+                        onEditBtnClick={onEditBtnClick}
                       />
                     ))
                   )}
@@ -123,6 +124,7 @@ const ViewPatientHistoryModal = ({ show, handleClose, selection }) => {
             </Accordion.Item>
           </Accordion>
         </Modal.Body>
+
         <Modal.Footer>
           <Button variant="primary" onClick={handleClose}>
             Finished reading?
