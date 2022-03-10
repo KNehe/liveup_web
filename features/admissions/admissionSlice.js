@@ -9,10 +9,14 @@ const initialState = {
   isAdmittingSuccess: false,
   isAdmitting: false,
   isAdmittingMessage: "",
+  isLoadingAdmissionError: false,
+  isLoadingAdmissionSuccess: false,
+  isLoadingAdmission: false,
+  isLoadingAdmissionMessage: "",
 };
 
 
-// Get all wards
+// Admit a patient
 export const admitPatient = createAsyncThunk(
   "admit/patient",
   async (data, thunkAPI) => {
@@ -25,6 +29,22 @@ export const admitPatient = createAsyncThunk(
     }
   }
 );
+
+
+// Fetch a patient's admissions
+export const getAdmissions = createAsyncThunk(
+  "admit/get_all",
+  async (patient_id, thunkAPI) => {
+    try {
+      const accessToken = thunkAPI.getState().auth.authDetails.access_token;
+      return await admitService.getAdmissions(accessToken, patient_id);
+    } catch (error) {
+      const message = modifyResponseMessage(error)
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 
 export const admissionSlice = createSlice({
   name: "admit",
@@ -45,12 +65,27 @@ export const admissionSlice = createSlice({
         state.isAdmittingSuccess = true;
         // reset to empty and push
         state.singleAdmission = []
-        state.singleAdmission.push(action.payload);
+        state.singleAdmission.push(...action.payload);
       })
       .addCase(admitPatient.rejected, (state, action) => {
         state.isAdmitting = false;
         state.isAdmittingError = true;
         state.isAdmittingMessage = action.payload;
+      })
+      .addCase(getAdmissions.pending, (state) => {
+        state.isLoadingAdmission = true;
+      })
+      .addCase(getAdmissions.fulfilled, (state, action) => {
+        state.isLoadingAdmission = false;
+        state.isLoadingAdmissionSuccess = true;
+        // reset to empty and push
+        state.admissions = []
+        state.admissions.push(...action.payload);
+      })
+      .addCase(getAdmissions.rejected, (state, action) => {
+        state.isLoadingAdmission = false;
+        state.isLoadingAdmissionError = true;
+        state.isLoadingAdmissionMessage = action.payload;
       })
 
   },

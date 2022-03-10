@@ -14,9 +14,22 @@ const admitPatient = async (accessToken, data) => {
     return response.data
 }
 
+// Get admissions for a particular patient
+const getAdmissions = async (accessToken, patient_id) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    }
+        
+    const response = await axios.get(`${API_URL}admissions-info/?patient_id=${patient_id}`, config)
+
+    return response.data
+}
 
 const admitService = {
     admitPatient,
+    getAdmissions
 }
 
 export default admitService
