@@ -26,9 +26,21 @@ const updateReferral = async (accessToken, referralUri, referralData) => {
     return response.data
 }
 
+
+const getReferralsForPatient = async (accessToken, patientId) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    }
+    const response = await axios.get(`${API_URL}referrals-info/?patient_id=${patientId}`, config)
+
+    return response.data
+}
 const referralService = {
     referPatient,
     updateReferral,
+    getReferralsForPatient,
 }
 
 export default referralService

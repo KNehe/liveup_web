@@ -8,6 +8,7 @@ import EditPatientDetailModal from "../../modals/receptionists/edit_patient_deta
 import RegisterPatientModal from "../../modals/receptionists/register_patient_modal";
 import DeletePatientModal from "../../modals/receptionists/delete_patient_modal";
 import ReferPatientModal from "../../modals/receptionists/refer_patient_modal";
+import ReferralHistoryModal from "../../modals/receptionists/referral_history_modal";
 
 const RegisteredPatientsTable = ({ data }) => {
   // Doing this because redux-toolkit applies object.freeze() on data
@@ -19,6 +20,7 @@ const RegisteredPatientsTable = ({ data }) => {
   const [showAddPatientModal, setAddPatientModal] = useState(false);
   const [showDeletePatientModal, setDeletePatientModal] = useState(false);
   const [showReferPatientModal, setReferPatientModal] = useState(false);
+  const [showReferralHistoryModal, setReferralHistoryModal] = useState(false);
 
   const [selectedPatient, setSelectedPatient] = useState(null);
 
@@ -39,8 +41,13 @@ const RegisteredPatientsTable = ({ data }) => {
   };
 
   const handleCloseReferModal = () => {
-    setReferPatientModal(false)
-  }
+    setReferPatientModal(false);
+  };
+
+  const handleCloseReferralHistoryModal = () => {
+    setSelectedPatient(null);
+    setReferralHistoryModal(false);
+  };
 
   const columns = [
     { title: "Patient Number", field: "patient_number" },
@@ -61,8 +68,8 @@ const RegisteredPatientsTable = ({ data }) => {
       icon: tableIcons.Send,
       tooltip: "Refer patient",
       onClick: (event, rowData) => {
-        setSelectedPatient(rowData)
-        setReferPatientModal(true)
+        setSelectedPatient(rowData);
+        setReferPatientModal(true);
       },
     },
     {
@@ -79,6 +86,14 @@ const RegisteredPatientsTable = ({ data }) => {
       onClick: (event, rowData) => {
         setSelectedPatient(rowData);
         setDeletePatientModal(true);
+      },
+    },
+    {
+      icon: tableIcons.History,
+      tooltip: "View referral history",
+      onClick: (event, rowData) => {
+        setSelectedPatient(rowData);
+        setReferralHistoryModal(true);
       },
     },
   ];
@@ -148,6 +163,13 @@ const RegisteredPatientsTable = ({ data }) => {
         show={showReferPatientModal}
         handleClose={handleCloseReferModal}
         selectedPatient={selectedPatient}
+      />
+
+      {/* Patient Referral History Modal */}
+      <ReferralHistoryModal
+        show={showReferralHistoryModal}
+        handleClose={handleCloseReferralHistoryModal}
+        selection={selectedPatient}
       />
     </>
   );
