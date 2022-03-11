@@ -53,6 +53,9 @@ export const referralSlice = createSlice({
     resetLoadingCliniciansError: (state) => {
       state.isReferringError = false
     },
+    resetUpdateReferralError: (state) => {
+      state.isUpdatingReferralError = false
+    },
   },
   extraReducers: (builder) => {
     builder

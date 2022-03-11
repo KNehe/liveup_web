@@ -36,6 +36,10 @@ const PrescribeIcon = () => {
   return <p style={styles}>Prescibe</p>;
 };
 
+const SatusIcon = () => {
+  return <p style={styles}>Status✏️</p>;
+};
+
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
   Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -64,6 +68,7 @@ const tableIcons = {
   Details: forwardRef((props, ref) => <Details {...props} ref={ref} />),
   Admit: AdmitIcon,
   Prescribe: PrescribeIcon,
+  Satus: SatusIcon,
 };
 
 export { tableIcons };

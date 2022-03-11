@@ -9,6 +9,7 @@ import PrescribeModal from "../../modals/clinicians/prescribe_modal";
 import ViewPatientHistoryModal from "../../modals/clinicians/history_modal";
 import EditAdmissionModal from "../../modals/clinicians/edit_admission";
 import EditPrescriptionModal from "../../modals/clinicians/edit_prescription_modal";
+import EditStatusModal from "../../modals/clinicians/edit_status_modal";
 
 const AssignedPatientsTable = ({ data }) => {
   // Doing this because redux-toolkit applies object.freeze() on data
@@ -33,6 +34,8 @@ const AssignedPatientsTable = ({ data }) => {
 
   const [showEditPrescriptionModal, setShowEditPrescriptionModal] =
     useState(false);
+
+  const [showEditStatusModal, setShowEditStatusModal] = useState(false);
 
   const handleCloseDetailModal = () => {
     setShowDetailModal(false);
@@ -78,7 +81,20 @@ const AssignedPatientsTable = ({ data }) => {
     setSelectedPrescription(null);
   };
 
+  const handleCloseStatusModal = () => {
+    setSelection(null);
+    setShowEditStatusModal(null);
+  };
+
   const actions = [
+    {
+      icon: tableIcons.Satus,
+      tooltip: "Change status",
+      onClick: (event, rowData) => {
+        setSelection(rowData);
+        setShowEditStatusModal(true);
+      },
+    },
     {
       icon: tableIcons.Details,
       tooltip: "Details",
@@ -127,7 +143,7 @@ const AssignedPatientsTable = ({ data }) => {
           icons={tableIcons}
           columns={columns}
           data={patientData}
-          title="Patients Referred To you"
+          title="Referrals To you"
           actions={actions}
           options={{
             sorting: true,
@@ -181,6 +197,13 @@ const AssignedPatientsTable = ({ data }) => {
         show={showEditPrescriptionModal}
         handleClose={handleCloseEditPrescriptionModal}
         selection={selectedPrescription}
+      />
+
+      {/* Edit Status Modal */}
+      <EditStatusModal
+        show={showEditStatusModal}
+        handleClose={handleCloseStatusModal}
+        selection={selection}
       />
     </>
   );
