@@ -1,6 +1,6 @@
 import { Button, Row, Card } from "react-bootstrap";
 
-const ReferralHistoryCard = ({ item, authDetails }) => {
+const ReferralHistoryCard = ({ item, authDetails, onEditBtnClick}) => {
   return (
     <Card className="mt-2 p-3">
       <Row>
@@ -59,7 +59,7 @@ const ReferralHistoryCard = ({ item, authDetails }) => {
         </p>
         {authDetails?.user?.email === item?.created_by?.email ? (
           <p>
-            <Button>Edit</Button>
+            <Button onClick={(e, i) => onEditBtnClick(e, item)}>Edit</Button>
           </p>
         ) : (
           ""

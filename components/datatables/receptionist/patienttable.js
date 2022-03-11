@@ -9,6 +9,7 @@ import RegisterPatientModal from "../../modals/receptionists/register_patient_mo
 import DeletePatientModal from "../../modals/receptionists/delete_patient_modal";
 import ReferPatientModal from "../../modals/receptionists/refer_patient_modal";
 import ReferralHistoryModal from "../../modals/receptionists/referral_history_modal";
+import EditReferralModal from "../../modals/receptionists/edit_referral_modal";
 
 const RegisteredPatientsTable = ({ data }) => {
   // Doing this because redux-toolkit applies object.freeze() on data
@@ -21,8 +22,10 @@ const RegisteredPatientsTable = ({ data }) => {
   const [showDeletePatientModal, setDeletePatientModal] = useState(false);
   const [showReferPatientModal, setReferPatientModal] = useState(false);
   const [showReferralHistoryModal, setReferralHistoryModal] = useState(false);
+  const [showEditReferralModal, setEditReferralModal] = useState(false);
 
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedReferral, setSelectedReferral] = useState(null);
 
   const handleClosePatientDetailModal = () => {
     setPatientDetailModal(false);
@@ -48,6 +51,18 @@ const RegisteredPatientsTable = ({ data }) => {
     setSelectedPatient(null);
     setReferralHistoryModal(false);
   };
+
+  const handleCloseEditReferralModal = () => {
+    setSelectedReferral(null)
+    setEditReferralModal(false);
+  };
+
+  const onEditBtnClickHandler = (e, selectedReferral) => {
+    setSelectedPatient(null);
+    setSelectedReferral(selectedReferral)
+    setReferralHistoryModal(false);
+    setEditReferralModal(true)
+  }
 
   const columns = [
     { title: "Patient Number", field: "patient_number" },
@@ -170,7 +185,14 @@ const RegisteredPatientsTable = ({ data }) => {
         show={showReferralHistoryModal}
         handleClose={handleCloseReferralHistoryModal}
         selection={selectedPatient}
+        onEditBtnClick={onEditBtnClickHandler}
       />
+
+      {/* Edit Referral Modal */}
+      <EditReferralModal
+      show={showEditReferralModal}
+      handleClose={handleCloseEditReferralModal}
+      selectedReferral={selectedReferral}/>
     </>
   );
 };

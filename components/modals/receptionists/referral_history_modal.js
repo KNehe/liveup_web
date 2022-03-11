@@ -12,7 +12,12 @@ import {
 import { getAssignedPatients } from "../../../features/patients/assigned_patientsSlice";
 import ReferralHistoryCard from "./referral_history_card";
 
-const ReferralHistoryModal = ({ show, handleClose, selection }) => {
+const ReferralHistoryModal = ({
+  show,
+  handleClose,
+  selection,
+  onEditBtnClick,
+}) => {
   const {
     referrals,
     isLoadingReferralsSuccess,
@@ -42,10 +47,9 @@ const ReferralHistoryModal = ({ show, handleClose, selection }) => {
     return list[list.length - 2];
   };
 
-
   return (
     <>
-      <Modal show={show} onHide={handleClose} centered size="lg">
+      <Modal show={show} onHide={handleClose} centered size="lg" fullscreen>
         <Modal.Header closeButton>
           <Modal.Title>Referral History</Modal.Title>
         </Modal.Header>
@@ -62,12 +66,16 @@ const ReferralHistoryModal = ({ show, handleClose, selection }) => {
               <p className="text-success">
                 Patient has not been referred to any clinician yet!
               </p>
-            ) : 
-            referrals?.map((item, i) => (
-                <ReferralHistoryCard key={i} item={item} authDetails={authDetails}/>
-            ))
-           
-            }
+            ) : (
+              referrals?.map((item, i) => (
+                <ReferralHistoryCard
+                  onEditBtnClick={onEditBtnClick}
+                  key={i}
+                  item={item}
+                  authDetails={authDetails}
+                />
+              ))
+            )}
           </Card>
         </Modal.Body>
       </Modal>
