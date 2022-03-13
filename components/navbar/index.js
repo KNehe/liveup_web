@@ -4,6 +4,7 @@ import { reset, resetAuthDetails } from "../../features/auth/authSlice";
 import authService from "../../features/auth/authService";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const CNavbar = () => {
   const { authDetails } = useSelector((state) => state.auth);
@@ -33,7 +34,7 @@ const CNavbar = () => {
       fixed="top"
     >
       <Container>
-        <Navbar.Brand href="#home">LiveUp</Navbar.Brand>
+        <Navbar.Brand href="/">LiveUp</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
@@ -50,7 +51,11 @@ const CNavbar = () => {
           <Nav>
             {authDetails?.user ? (
               <NavDropdown title={title} id="collasible-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
+                <Link href='/profile'>
+                  <NavDropdown.Item href='/profile'>
+                    Profile
+                  </NavDropdown.Item>
+                </Link>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={onLogout}>Logout</NavDropdown.Item>
               </NavDropdown>

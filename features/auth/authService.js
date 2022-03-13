@@ -16,8 +16,8 @@ const verifyToken = async (token) => {
     const response = await axios.post(API_URL + "token/verify/", { token });
     if (response.status === 200) {
       return true;
-    }else {
-        return false;
+    } else {
+      return false;
     }
   } catch (error) {
     return false;
@@ -29,10 +29,42 @@ const logout = () => {
   localStorage.removeItem("currentPageUri");
 };
 
+const updateUser = async (accessToken, userData) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+  try {
+    const response = await axios.patch(`${API_URL}user/`, userData, config);
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+
+const updatePassword = async (accessToken, newPassword) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+  try {
+    const response = await axios.post(`${API_URL}password/change/`, newPassword, config);
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+
 const authService = {
   login,
   verifyToken,
   logout,
+  updateUser,
+  updatePassword,
 };
 
 export default authService;
