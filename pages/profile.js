@@ -101,7 +101,11 @@ const Profile = () => {
 
     toast.info("Password changed successfully");
 
-    router.reload()
+    setForm((previousState) => ({
+      ...previousState,
+      new_password1: '',
+      new_password2: ''
+    }));
   };
 
   const updateState = (data) => {

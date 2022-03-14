@@ -51,7 +51,34 @@ const updatePassword = async (accessToken, newPassword) => {
     },
   };
   try {
-    const response = await axios.post(`${API_URL}password/change/`, newPassword, config);
+    const response = await axios.post(
+      `${API_URL}password/change/`,
+      newPassword,
+      config
+    );
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+
+const forgotPasswordRequest = async (email) => {
+  try {
+    const response = await axios.post(`${API_URL}password/reset/`, { email });
+
+    return { data: response.data };
+  } catch (error) {
+    return { error };
+  }
+};
+
+const passwordResetConfirm = async (payload) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}password/reset/confirm/`,
+      payload
+    );
 
     return { data: response.data };
   } catch (error) {
@@ -65,6 +92,8 @@ const authService = {
   logout,
   updateUser,
   updatePassword,
+  forgotPasswordRequest,
+  passwordResetConfirm,
 };
 
 export default authService;

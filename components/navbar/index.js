@@ -60,7 +60,7 @@ const CNavbar = () => {
                 <NavDropdown.Item onClick={onLogout}>Logout</NavDropdown.Item>
               </NavDropdown>
             ) : (
-              <Nav.Link href="login">Login</Nav.Link>
+              <Nav.Link href="/login">Login</Nav.Link>
             )}
           </Nav>
         </Navbar.Collapse>

@@ -4,42 +4,38 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { Spinner } from "react-bootstrap";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { login, reset } from "../features/auth/authSlice";
+import { Spinner, Alert } from "react-bootstrap";
+import { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigator } from "../hooks/hooks";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
+import authService from "../features/auth/authService";
 
-const Login = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
+const ForgotPassword = () => {
+  const [form, setForm] = useState({ email: "" });
 
-  const { email, password } = form;
-
-  const dispatch = useDispatch();
+  const { email } = form;
 
   const router = useRouter();
 
-  const { authDetails, isLoading, isSuccess, isError, message } = useSelector(
+  const { authDetails, isLoading, isSuccess } = useSelector(
     (state) => state.auth
   );
+
+  const [message, setMessage] = useState('');
+  const [showAlert, setAlert] = useState(false);
+  const [isProcessing, setProcessing] = useState(false);
+
+  const formRef = useRef(null)
 
   useEffect(() => {
     if (isSuccess || authDetails) {
       useNavigator(router, authDetails);
     }
   }, [authDetails, isSuccess]);
-
-  useEffect(() => {
-    if (isError) {
-      toast.error(message);
-    }
-
-    dispatch(reset());
-  }, [isError, message]);
 
   const onInputChange = (e) => {
     setForm((previousState) => ({
@@ -48,25 +44,42 @@ const Login = () => {
     }));
   };
 
-  const onLoginFormSubmitted = (e) => {
+  const onForgotPasswordFormSubmitted = async (e) => {
     e.preventDefault();
+    
+    setAlert(false)
+    setProcessing(true)
 
-    const userData = { email, password };
-
-    dispatch(login(userData));
+    const { data, error } = await authService.forgotPasswordRequest(email);
+    if (error) {
+      toast.error("An error occurred");
+      setProcessing(false)
+      return;
+    }
+    setMessage("Please check your email");
+    setAlert(true)
+    toast.info('Please check your email');
+    setProcessing(false)
+    setForm({email: ''})
   };
 
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Forgot Password</title>
       </Head>
       <Container>
         <div style={{ marginTop: "25vh" }}></div>
         <Row className="mx-auto">
           <Col lg={6} md={8} sm={10} className="mx-auto">
             <Card className="p-3">
-              <Form onSubmit={onLoginFormSubmitted}>
+              <Alert show={showAlert} variant="success" className="p-2 m-2">
+                <Alert.Heading>Email sent</Alert.Heading>
+                <p>
+                 {message}
+                </p>
+              </Alert>
+              <Form onSubmit={onForgotPasswordFormSubmitted} ref={formRef}>
                 <Form.Group className="mb-4" controlId="email">
                   <Form.Label>Email</Form.Label>
                   <Form.Control
@@ -79,20 +92,8 @@ const Login = () => {
                   />
                 </Form.Group>
 
-                <Form.Group className="mb-4" controlId="password">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    required
-                    onChange={onInputChange}
-                    value={password}
-                    name="password"
-                    type="password"
-                    placeholder="Enter password"
-                  />
-                </Form.Group>
-
-                <Button variant="primary" type="submit" disabled={isLoading | isSuccess}>
-                  {isLoading ? (
+                <Button variant="primary" type="submit" disabled={isProcessing}>
+                  {isProcessing ? (
                     <Spinner
                       as="span"
                       animation="border"
@@ -101,13 +102,13 @@ const Login = () => {
                       aria-hidden="true"
                     />
                   ) : (
-                    "Login"
+                    "Submit Reset Request"
                   )}
                 </Button>
               </Form>
 
-              <Link href="/forgot_password">
-                <a className="mt-4">Forgot password ?</a>
+              <Link href="/login">
+                <a className="mt-4">Remember password ?</a>
               </Link>
             </Card>
           </Col>
@@ -117,4 +118,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;
