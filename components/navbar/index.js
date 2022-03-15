@@ -32,6 +32,7 @@ const CNavbar = () => {
       bg="primary"
       variant="dark"
       fixed="top"
+      style={{minHeight: '10vh', width: '100%'}}
     >
       <Container>
         <Navbar.Brand href="/">LiveUp</Navbar.Brand>
@@ -40,8 +41,8 @@ const CNavbar = () => {
           <Nav className="me-auto">
             {!authDetails?.user ? (
               <>
-                <Nav.Link href="#features">About</Nav.Link>
-                <Nav.Link href="#pricing">Features</Nav.Link>
+                <Nav.Link href="/#about">About</Nav.Link>
+                <Nav.Link href="/#features">Features</Nav.Link>
               </>
             ) : (
               ""
