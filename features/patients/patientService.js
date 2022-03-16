@@ -1,6 +1,6 @@
 import axios from "axios";
+import globalAxios from "../../axios/index";
 import userService from "../users/userService";
-import { modifyResponseMessage } from "../../utils/messages";
 
 const API_URL = "http://127.0.0.1:8000/api/v1/";
 
@@ -90,35 +90,48 @@ const getPatientData = async (url, accessToken) => {
 };
 
 const aggregateAssignedPatientsData = async (url, accessToken) => {
-    let data = await patientService.getPatientsAssignedToClinician(
-      url,
+  let data = await patientService.getPatientsAssignedToClinician(
+    url,
+    accessToken
+  );
+
+  for (const item of data.results) {
+    const patient = await getPatientData(item.patient, accessToken);
+    const created_by = await userService.getUserData(
+      item.created_by,
       accessToken
     );
+    // const doctor = await userService.getUserData(item.doctor, accessToken);
 
-    for (const item of data.results) {
-      const patient = await getPatientData(item.patient, accessToken);
-      const created_by = await userService.getUserData(
-        item.created_by,
+    if (item.updated_by) {
+      const updated_by = await userService.getUserData(
+        item.updated_by,
         accessToken
       );
-      // const doctor = await userService.getUserData(item.doctor, accessToken);
-
-      if (item.updated_by) {
-        const updated_by = await userService.getUserData(
-          item.updated_by,
-          accessToken
-        );
-        item["updated_by"] = updated_by;
-      }
-
-      item["patient"] = patient;
-      // item["doctor"] = doctor;
-      // item["patient_name"] = patient?.patient_name;
-      // item["age"] = patient?.age;
-      item["created_by"] = created_by;
+      item["updated_by"] = updated_by;
     }
-    
-    return data
+
+    item["patient"] = patient;
+    // item["doctor"] = doctor;
+    // item["patient_name"] = patient?.patient_name;
+    // item["age"] = patient?.age;
+    item["created_by"] = created_by;
+  }
+
+  return data;
+};
+
+const getPatientsByName = async (accessToken, patientName) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+  const response = await globalAxios.get(
+    `patients/by-name/?patient_name=${patientName}`,
+    config
+  );
+  return response.data;
 };
 
 const patientService = {
@@ -129,6 +142,7 @@ const patientService = {
   deletePatient,
   getPatientData,
   aggregateAssignedPatientsData,
+  getPatientsByName,
 };
 
 export default patientService;

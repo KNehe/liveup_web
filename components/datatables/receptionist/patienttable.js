@@ -64,6 +64,18 @@ const RegisteredPatientsTable = ({ data }) => {
     setEditReferralModal(true);
   };
 
+  const referFoundPatientHandler = (e, patient) => {
+    setSelectedPatient(patient);
+    setAddPatientModal(false);
+    setReferPatientModal(true);
+  };
+
+  const editFoundPatientHandler = (e, patient) => {
+    setSelectedPatient(patient);
+    setAddPatientModal(false);
+    setEditDetailModal(true);
+  };
+
   const columns = [
     { title: "Patient Number", field: "patient_number" },
     { title: "Patient Name", field: "patient_name" },
@@ -164,6 +176,8 @@ const RegisteredPatientsTable = ({ data }) => {
       <RegisterPatientModal
         show={showAddPatientModal}
         handleClose={handleCloseAddModal}
+        referFoundPatientHandler={referFoundPatientHandler}
+        editFoundPatientHandler={editFoundPatientHandler}
       />
 
       {/* Delete patient modal */}

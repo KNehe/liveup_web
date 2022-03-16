@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Button, Modal, Card, Form, Spinner } from "react-bootstrap";
+import { Button, Modal, Card, Form, Spinner, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import patientService from "../../../features/patients/patientService";
 import {
   registerPatient,
   getPatientsForRecep,
@@ -9,7 +10,12 @@ import {
 } from "../../../features/patients/patientSlice";
 import { getReceptionistStats } from "../../../features/stats/statSlice";
 
-const RegisterPatientDetailModal = ({ show, handleClose }) => {
+const RegisterPatientDetailModal = ({
+  show,
+  handleClose,
+  referFoundPatientHandler,
+  editFoundPatientHandler,
+}) => {
   const [patientFormData, setPatientFormData] = useState({
     patient_name: "",
     next_of_kin: "",
@@ -29,6 +35,16 @@ const RegisterPatientDetailModal = ({ show, handleClose }) => {
 
   const dispatch = useDispatch();
 
+  const { authDetails } = useSelector((state) => state.auth);
+
+  const [foundPatients, setFoundPatients] = useState([]);
+
+  useEffect(() => {
+    if (show) {
+      resetLocalStateHandler();
+    }
+  }, [show]);
+
   useEffect(() => {
     if (isRegisteringError) {
       toast.error(registeringMessage);
@@ -44,7 +60,7 @@ const RegisterPatientDetailModal = ({ show, handleClose }) => {
       dispatch(getPatientsForRecep(null));
       setFetchingUpdate(false);
       dispatch(getReceptionistStats());
-      handleClose()
+      handleClose();
     }
   }, [isRegisteringSuccess, isRegisteringPatient]);
 
@@ -55,10 +71,84 @@ const RegisterPatientDetailModal = ({ show, handleClose }) => {
     }));
   };
 
-  const onFormSubmitted = (e) => {
+  const onFormSubmitted = async (e) => {
     e.preventDefault();
-    dispatch(registerPatient(patientFormData));
+
+    const data = await patientService.getPatientsByName(
+      authDetails?.access_token,
+      patientFormData?.patient_name
+    );
+
+    if (data) {
+      console.log(data);
+      setFoundPatients(data);
+    } else {
+      dispatch(registerPatient(patientFormData));
+      resetLocalStateHandler();
+    }
   };
+
+  const resetLocalStateHandler = () => {
+    console.log("got");
+    setPatientFormData({
+      patient_name: "",
+      next_of_kin: "",
+      address: "",
+      contacts: "",
+      date_of_birth: "",
+    });
+    setFoundPatients([]);
+  };
+
+  const continueRegistrationHandler = () => {
+    dispatch(registerPatient(patientFormData));
+    resetLocalStateHandler();
+  };
+
+  const foundSimilarPatients = foundPatients?.map((patient, i) => {
+    return (
+      <Card key={i} className="p-2 mb-2">
+        <p>
+          <b>Patient Number: </b>
+          {patient?.patient_number}
+        </p>
+        <p>
+          <b>Name: </b>
+          {patient?.patient_name}
+        </p>
+        <p>
+          <b>Age: </b>
+          {patient?.age} yrs
+        </p>
+        <p>
+          <b>Date of Birth: </b>
+          {patient?.date_of_birth}
+        </p>
+        <p>
+          <b>Next of Kin: </b>
+          {patient?.next_of_kin}
+        </p>
+        <p>
+          <b>Contacts: </b>
+          {patient?.contacts}
+        </p>
+        <Row>
+          <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <Button onClick={resetLocalStateHandler}>Cancel</Button>
+            <Button onClick={(e, i) => referFoundPatientHandler(e, patient)}>
+              Refer
+            </Button>
+            <Button onClick={(e, i) => editFoundPatientHandler(e, patient)}>
+              Edit
+            </Button>
+            <Button onClick={continueRegistrationHandler}>
+              Continue Registration
+            </Button>
+          </div>
+        </Row>
+      </Card>
+    );
+  });
 
   return (
     <>
@@ -68,6 +158,17 @@ const RegisterPatientDetailModal = ({ show, handleClose }) => {
         </Modal.Header>
         <Modal.Body>
           <Card className="p-2">
+            {/* similar patient(s)  found section*/}
+            {!isRegisteringPatient && foundPatients?.length > 0 ? (
+              <Card className="p-2 m-2">
+                <h3>Patient(s) with similar name found</h3>
+                {foundSimilarPatients}
+              </Card>
+            ) : (
+              ""
+            )}
+
+            {/* form */}
             <Form onSubmit={onFormSubmitted}>
               <Form.Group className="mb-4" controlId="patient_name">
                 <Form.Label>Patient Name</Form.Label>

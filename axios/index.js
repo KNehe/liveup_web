@@ -10,17 +10,18 @@ const instance = axios.create({
 instance.interceptors.response.use(function(response){
     return response
 }, function (error) {
-    if (error.response.status === 401)
+    if (error?.message == 'Network Error')
+    {
+        toast.error('Network error')
+        return
+    }
+    if (error?.response?.status === 401)
     {
         toast.error('Session expired')
         window.location = '/login'
         return
     }
-    if (error.message === 'Network Error')
-    {
-        toast.error('Network error')
-        return
-    }
+
     return Promise.reject()
 });
 
