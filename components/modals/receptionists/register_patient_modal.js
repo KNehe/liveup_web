@@ -39,6 +39,8 @@ const RegisterPatientDetailModal = ({
 
   const [foundPatients, setFoundPatients] = useState([]);
 
+  const [isLookingUpExistingPatient, setLookingUpExistingPatient] = useState(false);
+
   useEffect(() => {
     if (show) {
       resetLocalStateHandler();
@@ -74,14 +76,15 @@ const RegisterPatientDetailModal = ({
   const onFormSubmitted = async (e) => {
     e.preventDefault();
 
+    setLookingUpExistingPatient(true)
     const data = await patientService.getPatientsByName(
       authDetails?.access_token,
       patientFormData?.patient_name
     );
 
-    if (data) {
-      console.log(data);
+    if (data && data?.length > 0) {
       setFoundPatients(data);
+      setLookingUpExistingPatient(false)
     } else {
       dispatch(registerPatient(patientFormData));
       resetLocalStateHandler();
@@ -233,9 +236,9 @@ const RegisterPatientDetailModal = ({
               <Button
                 variant="primary"
                 type="submit"
-                disabled={isRegisteringPatient || isFectchingUpdate}
+                disabled={isLookingUpExistingPatient || isRegisteringPatient || isFectchingUpdate}
               >
-                {isRegisteringPatient || isFectchingUpdate ? (
+                {isLookingUpExistingPatient || isRegisteringPatient || isFectchingUpdate ? (
                   <Spinner
                     as="span"
                     animation="border"

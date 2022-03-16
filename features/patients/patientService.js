@@ -1,8 +1,8 @@
 import axios from "axios";
-import globalAxios from "../../axios/index";
+import globalAxios, { CURRENT_API_URL } from "../../axios/index";
 import userService from "../users/userService";
 
-const API_URL = "http://127.0.0.1:8000/api/v1/";
+const API_URL = CURRENT_API_URL;
 
 const getPatientsAssignedToClinician = async (url, accessToken) => {
   const config = {
