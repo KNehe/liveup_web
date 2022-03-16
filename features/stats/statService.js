@@ -1,6 +1,5 @@
-import axios from "axios";
+import globalAxios from '../../axios/index'
 
-const API_URL = "http://127.0.0.1:8000/api/v1/";
 
 const fetchReceptionistStats = async (accessToken) => {
   const config = {
@@ -9,7 +8,7 @@ const fetchReceptionistStats = async (accessToken) => {
     },
   };
 
-  const response = await axios.get(`${API_URL}receptionists/stats/`, config);
+  const response = await globalAxios.get('receptionists/stats/', config);
 
   return response.data;
 };
@@ -21,7 +20,7 @@ const fetchClinicianStats = async (accessToken) => {
     },
   };
 
-  const response = await axios.get(`${API_URL}medics/stats/`, config);
+  const response = await globalAxios.get('medics/stats/', config);
 
   return response.data;
 }

@@ -91,7 +91,7 @@ export const admissionSlice = createSlice({
         state.isAdmittingSuccess = true;
         // reset to empty and push
         state.singleAdmission = [];
-        state.singleAdmission.push(...action.payload);
+        state.singleAdmission.push(action.payload);
       })
       .addCase(admitPatient.rejected, (state, action) => {
         state.isAdmitting = false;

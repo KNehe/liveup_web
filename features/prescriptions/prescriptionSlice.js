@@ -93,7 +93,7 @@ export const prescriptionSlice = createSlice({
         state.isLoadingPrescSuccess = true;
         // reset to empty and push
         state.prescs = [];
-        state.prescs.push(...action.payload);
+        state.prescs.push(action.payload);
       })
       .addCase(registerPrescription.rejected, (state, action) => {
         state.isLoadingPresc = false;

@@ -1,6 +1,5 @@
-import axios from "axios"
+import globalAxios from '../../axios/index'
 
-const API_URL = 'http://127.0.0.1:8000/api/v1/'
 
 const getAllWards = async (accessToken) => {
     const config = {
@@ -9,7 +8,7 @@ const getAllWards = async (accessToken) => {
         },
     }
         
-    const response = await axios.get(`${API_URL}wards/`, config)
+    const response = await globalAxios.get('wards/', config)
 
     return response.data
 }

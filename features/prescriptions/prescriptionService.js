@@ -1,6 +1,6 @@
 import axios from "axios"
+import globalAxios from '../../axios/index'
 
-const API_URL = 'http://127.0.0.1:8000/api/v1/'
 
 const prescribe = async (accessToken, payload) => {
     const config = {
@@ -9,7 +9,7 @@ const prescribe = async (accessToken, payload) => {
         },
     }
         
-    const response = await axios.post(`${API_URL}prescriptions/`, payload, config)
+    const response = await globalAxios.post('prescriptions/', payload, config)
 
     return response.data
 }
@@ -22,7 +22,7 @@ const getPatientPrescriptions = async (accessToken, patient_id) => {
         },
     }
         
-    const response = await axios.get(`${API_URL}prescriptions-info/?patient_id=${patient_id}`, config)
+    const response = await globalAxios.get(`prescriptions-info/?patient_id=${patient_id}`, config)
 
     return response.data
 }

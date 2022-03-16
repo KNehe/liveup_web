@@ -1,6 +1,6 @@
 import axios from "axios"
+import globalAxios from '../../axios/index'
 
-const API_URL = 'http://127.0.0.1:8000/api/v1/'
 
 const admitPatient = async (accessToken, data) => {
     const config = {
@@ -9,7 +9,7 @@ const admitPatient = async (accessToken, data) => {
         },
     }
         
-    const response = await axios.post(`${API_URL}admissions/`, data, config)
+    const response = await globalAxios.post(`admissions/`, data, config)
 
     return response.data
 }
@@ -22,7 +22,7 @@ const getAdmissions = async (accessToken, patient_id) => {
         },
     }
         
-    const response = await axios.get(`${API_URL}admissions-info/?patient_id=${patient_id}`, config)
+    const response = await globalAxios.get(`admissions-info/?patient_id=${patient_id}`, config)
 
     return response.data
 }

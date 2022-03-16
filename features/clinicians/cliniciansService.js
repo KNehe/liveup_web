@@ -1,6 +1,5 @@
-import axios from "axios"
+import globalAxios from '../../axios/index'
 
-const API_URL = 'http://127.0.0.1:8000/api/v1/'
 
 const getAllClinicians = async (accessToken) => {
     const config = {
@@ -9,7 +8,7 @@ const getAllClinicians = async (accessToken) => {
         },
     }
         
-    const response = await axios.get(`${API_URL}clinicians/`, config)
+    const response = await globalAxios.get('clinicians/', config)
 
     return response.data
 }

@@ -1,9 +1,8 @@
-import axios from "axios";
+import globalAxios from '../../axios/index'
 
-const API_URL = "http://127.0.0.1:8000/api/v1/auth/";
 
 const login = async (userData) => {
-  const response = await axios.post(API_URL + "login/", userData);
+  const response = await globalAxios.post('auth/login/', userData);
 
   if (response.data) {
     localStorage.setItem("authDetails", JSON.stringify(response.data));
@@ -13,7 +12,7 @@ const login = async (userData) => {
 
 const verifyToken = async (token) => {
   try {
-    const response = await axios.post(API_URL + "token/verify/", { token });
+    const response = await globalAxios.post("auth/token/verify/", { token });
     if (response.status === 200) {
       return true;
     } else {
@@ -36,7 +35,7 @@ const updateUser = async (accessToken, userData) => {
     },
   };
   try {
-    const response = await axios.patch(`${API_URL}user/`, userData, config);
+    const response = await globalAxios.patch(`auth/user/`, userData, config);
 
     return { data: response.data };
   } catch (error) {
@@ -51,8 +50,8 @@ const updatePassword = async (accessToken, newPassword) => {
     },
   };
   try {
-    const response = await axios.post(
-      `${API_URL}password/change/`,
+    const response = await globalAxios.post(
+      'auth/password/change/',
       newPassword,
       config
     );
@@ -65,7 +64,7 @@ const updatePassword = async (accessToken, newPassword) => {
 
 const forgotPasswordRequest = async (email) => {
   try {
-    const response = await axios.post(`${API_URL}password/reset/`, { email });
+    const response = await globalAxios.post('auth/password/reset/', { email });
 
     return { data: response.data };
   } catch (error) {
@@ -75,8 +74,8 @@ const forgotPasswordRequest = async (email) => {
 
 const passwordResetConfirm = async (payload) => {
   try {
-    const response = await axios.post(
-      `${API_URL}password/reset/confirm/`,
+    const response = await globalAxios.post(
+      'auth/password/reset/confirm/',
       payload
     );
 

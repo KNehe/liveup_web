@@ -1,6 +1,6 @@
 import axios from "axios"
+import globalAxios from '../../axios/index'
 
-const API_URL = 'http://127.0.0.1:8000/api/v1/'
 
 const referPatient = async (accessToken, referral) => {
     const config = {
@@ -9,7 +9,7 @@ const referPatient = async (accessToken, referral) => {
         },
     }
         
-    const response = await axios.post(`${API_URL}referrals/`, referral, config)
+    const response = await globalAxios.post('referrals/', referral, config)
 
     return response.data
 }
@@ -33,7 +33,7 @@ const getReferralsForPatient = async (accessToken, patientId) => {
             Authorization: `Bearer ${accessToken}`,
         },
     }
-    const response = await axios.get(`${API_URL}referrals-info/?patient_id=${patientId}`, config)
+    const response = await globalAxios.get(`referrals-info/?patient_id=${patientId}`, config)
 
     return response.data
 }
