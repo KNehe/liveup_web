@@ -53,16 +53,16 @@ const RegisteredPatientsTable = ({ data }) => {
   };
 
   const handleCloseEditReferralModal = () => {
-    setSelectedReferral(null)
+    setSelectedReferral(null);
     setEditReferralModal(false);
   };
 
   const onEditBtnClickHandler = (e, selectedReferral) => {
     setSelectedPatient(null);
-    setSelectedReferral(selectedReferral)
+    setSelectedReferral(selectedReferral);
     setReferralHistoryModal(false);
-    setEditReferralModal(true)
-  }
+    setEditReferralModal(true);
+  };
 
   const columns = [
     { title: "Patient Number", field: "patient_number" },
@@ -118,12 +118,12 @@ const RegisteredPatientsTable = ({ data }) => {
       {/* Registered Patients Data Table */}
       <Container>
         <Row className="mb-2">
-          <Col>&nbsp;</Col>
-          <Col>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div></div>
             <Button variant="primary" onClick={(e) => setAddPatientModal(true)}>
               Register patient
             </Button>
-          </Col>
+          </div>
         </Row>
         <Row>
           <div style={{ maxWidth: "100%" }}>
@@ -190,9 +190,10 @@ const RegisteredPatientsTable = ({ data }) => {
 
       {/* Edit Referral Modal */}
       <EditReferralModal
-      show={showEditReferralModal}
-      handleClose={handleCloseEditReferralModal}
-      selectedReferral={selectedReferral}/>
+        show={showEditReferralModal}
+        handleClose={handleCloseEditReferralModal}
+        selectedReferral={selectedReferral}
+      />
     </>
   );
 };

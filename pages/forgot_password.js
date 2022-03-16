@@ -69,7 +69,7 @@ const ForgotPassword = () => {
         <title>Forgot Password</title>
       </Head>
       <Container>
-        <div style={{ marginTop: "25vh" }}></div>
+        <div style={{ marginTop: "35vh" }}></div>
         <Row className="mx-auto">
           <Col lg={6} md={8} sm={10} className="mx-auto">
             <Card className="p-3">

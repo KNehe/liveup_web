@@ -53,7 +53,7 @@ const Index = () => {
         <title>Clinician | {authDetails?.user?.username}</title>
       </Head>
 
-      <div style={{ marginTop: "10vh" }}></div>
+      <div style={{ marginTop: "15vh" }}></div>
 
       {/* statistics */}
       <ClinicianStats stats={stats} />
@@ -61,12 +61,23 @@ const Index = () => {
       {/* assigned patients data table */}
       <Container>
         {isLoadingPatients && !assignedPatients[0]?.results ? (
-          <Spinner
-            as="span"
-            animation="border"
-            role="status"
-            aria-hidden="true"
-          />
+          <div
+            style={{
+              margin: "15vh auto",
+              width: "50%",
+              height: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Spinner
+              as="span"
+              animation="border"
+              role="status"
+              aria-hidden="true"
+            />
+          </div>
         ) : (
           <AssignedPatientsTable data={assignedPatients[0]?.results} />
         )}

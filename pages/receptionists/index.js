@@ -24,7 +24,7 @@ const Index = () => {
 
   const { currentPageUri } = useSelector((state) => state.page);
 
-  const [isFirstPageLoad, setFirstPageLoad] = useState(false)
+  const [isFirstPageLoad, setFirstPageLoad] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -35,16 +35,17 @@ const Index = () => {
   }, [isError]);
 
   useEffect(() => {
-    setFirstPageLoad(true)
-    dispatch(setCurrentPageUri(null))
+    setFirstPageLoad(true);
+    dispatch(setCurrentPageUri(null));
     localStorage.removeItem("currentPageUri");
     dispatch(getPatientsForRecep(currentPageUri));
     dispatch(getReceptionistStats());
+    setFirstPageLoad(false);
   }, []);
 
   const handleSetCurrentPageUri = (e, currentPageUri) => {
     e.preventDefault();
-    setFirstPageLoad(false)
+    setFirstPageLoad(false);
     localStorage.setItem("currentPageUri", currentPageUri);
     dispatch(setCurrentPageUri(currentPageUri));
     dispatch(getPatientsForRecep(currentPageUri));
@@ -58,17 +59,30 @@ const Index = () => {
 
       <div style={{ marginTop: "12vh" }}></div>
 
+      {/* Statistics */}
+
       <ReceptionistStats stats={stats} />
 
       {/* Patient Data Table */}
       <>
         {isFirstPageLoad && isLoadingPatients || !isSuccess ? (
-          <Spinner
-            as="span"
-            animation="border"
-            role="status"
-            aria-hidden="true"
-          />
+          <div
+            style={{
+              margin: "20vh auto",
+              width: "50%",
+              height: "50%",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <Spinner
+              as="span"
+              animation="border"
+              role="status"
+              aria-hidden="true"
+            />
+          </div>
         ) : (
           <RegisteredPatientsTable data={patients[0]?.results} />
         )}

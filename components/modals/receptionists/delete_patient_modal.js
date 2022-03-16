@@ -55,6 +55,7 @@ const DeletePatientDetailModal = ({ show, handleClose, selectedPatient }) => {
       // reset pagination - null means it will default to first page
       dispatch(setCurrentPageUri(null))
       localStorage.removeItem("currentPageUri");
+      handleClose()
     }
   }, [isDeletingSuccess, isDeletingPatient]);
 

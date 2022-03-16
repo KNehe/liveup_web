@@ -44,6 +44,7 @@ const RegisterPatientDetailModal = ({ show, handleClose }) => {
       dispatch(getPatientsForRecep(null));
       setFetchingUpdate(false);
       dispatch(getReceptionistStats());
+      handleClose()
     }
   }, [isRegisteringSuccess, isRegisteringPatient]);
 
