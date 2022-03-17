@@ -8,7 +8,7 @@ import { Spinner, Alert } from "react-bootstrap";
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { useNavigator } from "../../../hooks/hooks";
+import { navigate } from "../../../utils/navigate";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
@@ -31,7 +31,7 @@ const PasswordResetConfirm = () => {
 
   useEffect(() => {
     if (isSuccess || authDetails) {
-      useNavigator(router, authDetails);
+      navigate(router, authDetails);
     }
   }, [authDetails, isSuccess]);
 
