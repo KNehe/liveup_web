@@ -128,7 +128,7 @@ const getPatientsByName = async (accessToken, patientName) => {
     },
   };
   const response = await globalAxios.get(
-    `patients/by-name/?patient_name=${patientName}`,
+    `patient/by-name/?patient_name=${patientName}`,
     config
   );
   return response.data;

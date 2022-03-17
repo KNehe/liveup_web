@@ -81,6 +81,8 @@ const RegisterPatientDetailModal = ({
       authDetails?.access_token,
       patientFormData?.patient_name
     );
+console.log('data', data)
+console.log('form', patientFormData)
 
     if (data && data?.length > 0) {
       setFoundPatients(data);
@@ -92,7 +94,6 @@ const RegisterPatientDetailModal = ({
   };
 
   const resetLocalStateHandler = () => {
-    console.log("got");
     setPatientFormData({
       patient_name: "",
       next_of_kin: "",
@@ -101,6 +102,7 @@ const RegisterPatientDetailModal = ({
       date_of_birth: "",
     });
     setFoundPatients([]);
+    setLookingUpExistingPatient(false)
   };
 
   const continueRegistrationHandler = () => {

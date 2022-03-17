@@ -6,7 +6,7 @@ const HOSTED_API_URL = 'https://nehe-liveup-api.herokuapp.com/api/v1/'
 const CURRENT_API_URL = HOSTED_API_URL
 
 const instance = axios.create({
-    baseURL: HOSTED_API_URL
+    baseURL: CURRENT_API_URL
 })
 instance.interceptors.response.use(function(response){
     return response

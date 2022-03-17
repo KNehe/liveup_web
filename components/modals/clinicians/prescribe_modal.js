@@ -7,6 +7,7 @@ import {
   getPatientsForRecep,
 } from "../../../features/patients/patientSlice";
 import { registerPrescription, resetLoadingPrescError } from "../../../features/prescriptions/prescriptionSlice";
+import { getClinicianStats } from "../../../features/stats/statSlice";
 
 const PrescribeModal = ({ show, handleClose, selection }) => {
   const [formData, setFormData] = useState(selection);
@@ -36,6 +37,7 @@ const PrescribeModal = ({ show, handleClose, selection }) => {
   useEffect(() => {
     if (isLoadingPrescSuccess && !isLoadingPresc && show) {
       toast.info("Prescription added successfully !");
+      dispatch(getClinicianStats());
       handleClose();
     }
   }, [isLoadingPrescSuccess, isLoadingPresc]);
