@@ -34,7 +34,7 @@ export default function Home() {
             <Link href="/login">
               <a>{authDetails?.user ? "Continue working" : "Start working"}</a>
             </Link>
-            <a>Watch Demo</a>
+            <a href="https://youtu.be/FrIVVXfFy-M" target='_blank'>Watch Demo</a>
           </div>
         </div>
       </section>

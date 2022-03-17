@@ -20,6 +20,9 @@ to a doctor
 - Open http://localhost:3000 with your browser to see the result.
 - You can find the live web app [here](https://liveup-web.vercel.app/) (Do not know how long it will be up)
 
+# Demo
+- Watch the demo [youtube](https://youtu.be/FrIVVXfFy-M")
+
 ## Features
 - Export to csv and pdf
 - Login with email and password.
