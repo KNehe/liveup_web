@@ -1,8 +1,8 @@
-import {RECEPTIONIST, STUDENT_CLINICIAN, DOCTOR, NURSE} from '../utils/roles'
+import {RECEPTIONIST, STUDENT_CLINICIAN, DOCTOR, NURSE} from './roles'
 
 const CLINICIAN_ROLES = [DOCTOR, NURSE, STUDENT_CLINICIAN]
 
-const useNavigator = (router, authDetails) => {
+const navigate = (router, authDetails) => {
     if (CLINICIAN_ROLES.includes(authDetails?.user?.role)) {
         router.replace('/medics')
     } else if (authDetails?.user?.role === RECEPTIONIST) {
@@ -12,4 +12,4 @@ const useNavigator = (router, authDetails) => {
     }
 }
 
-export {useNavigator}
+export {navigate}

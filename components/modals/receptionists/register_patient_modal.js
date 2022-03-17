@@ -81,9 +81,6 @@ const RegisterPatientDetailModal = ({
       authDetails?.access_token,
       patientFormData?.patient_name
     );
-console.log('data', data)
-console.log('form', patientFormData)
-
     if (data && data?.length > 0) {
       setFoundPatients(data);
       setLookingUpExistingPatient(false)

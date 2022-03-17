@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login, reset } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
-import { useNavigator } from "../hooks/hooks";
+import { navigate } from "../utils/navigate";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
@@ -29,7 +29,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isSuccess || authDetails) {
-      useNavigator(router, authDetails);
+      navigate(router, authDetails);
     }
   }, [authDetails, isSuccess]);
 
