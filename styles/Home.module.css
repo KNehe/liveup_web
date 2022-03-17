@@ -1,0 +1,129 @@
+/* INTRO SECTION */
+
+.intro {
+  margin-top: 9vh;
+  position: relative;
+  height: 91vh;
+}
+
+.intro::after {
+  content: "";
+  background-color: rgb(0, 20, 20, 0.8);
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0;
+}
+
+.intro_img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.intro_text {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  color: #fff;
+  text-align: left;
+}
+.intro_text > h1 {
+  font-weight: 700;
+  font-size: clamp(2rem, 4rem, 8rem);
+}
+
+.intro_text > p {
+  margin: 1.5rem 0;
+}
+.intro_btns {
+  display: flex;
+  justify-content: space-between;
+}
+.intro_btns > a {
+  padding: 0.8rem;
+  transition: background-color 0.3s ease-in;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid rgb(255, 255, 255, 0.6);
+  text-decoration: none;
+}
+
+.intro_btns > a:first-of-type {
+  margin-right: 0.5rem;
+  background-color: rgb(255, 255, 255, 0.2);
+  color: #fff;
+  font-weight: 500;
+}
+
+.intro_btns > a:first-of-type:hover {
+  background-color: rgb(255, 255, 255, 0.3);
+}
+
+.intro_btns > a:last-of-type:hover {
+  background-color: rgb(0, 0, 0, 0.9);
+}
+
+/* FEATURES SECTION */
+
+.features {
+  width: 80%;
+  margin: auto;
+  /* margin-top: 10rem; */
+}
+.feature {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 5rem;
+}
+
+.feature > .text {
+  width: 65%;
+  font-size: 1.1rem;
+  line-height: 2rem;
+}
+
+.feature > .text > h2 {
+  font-size: clamp(1rem, 2.5rem, 3rem);
+}
+
+.feature_img {
+  object-fit: contain;
+  width: 30%;
+}
+
+/* ABOUT SECTION */
+.About {
+  width: 80%;
+  margin: auto;
+  line-height: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.About > h2 {
+  margin-top: 6rem;
+  margin-bottom: 1rem;
+}
+.About .title {
+  font-size: clamp(1rem, 2.5rem, 3rem);
+}
+
+.About > img {
+  width: 70%;
+  height: 40%;
+  max-height: 40%;
+  object-fit: contain;
+}
+
+@media screen and (max-width: 450px) {
+  .About > img {
+    width: 100%;
+  }
+}
