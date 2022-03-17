@@ -143,5 +143,6 @@ export const {
   resetLoadingCliniciansError,
   resetClinician,
   resetLoadReferralError,
+  resetUpdateReferralError,
 } = referralSlice.actions;
 export default referralSlice.reducer;

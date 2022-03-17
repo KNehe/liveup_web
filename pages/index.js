@@ -47,7 +47,7 @@ export default function Home() {
             <h2> Track Prescriptions</h2>
             <p>
               Record prescriptions for your patients every day. Be able to
-              lookup a patient's past prescription by you or any other doctor.
+              lookup a patient&apos;s past prescription by you or any other doctor.
               This saves you the headache of looking up past prescriptions from
               books which might have been misplaced or destroyed
             </p>

@@ -90,7 +90,7 @@ const EditStatusModal = ({ show, handleClose, selection }) => {
                 actions
               </p>
               <p className="mb-4">
-                Status is by default <b>"Not Seen"</b>, when a patient is
+                Status is by default <b>&quot;Not Seen&quot;</b>, when a patient is
                 referred to you
               </p>
 

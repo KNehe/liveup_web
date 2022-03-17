@@ -46,7 +46,7 @@ const tableIcons = {
   Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
   Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
   DetailPanel: forwardRef((props, ref) => (
-    <ChevronRight {...props} ref={ref} />
+    <ChevronRight {...props} ref={ref}  />
   )),
   Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
   Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
@@ -70,5 +70,30 @@ const tableIcons = {
   Prescribe: PrescribeIcon,
   Satus: SatusIcon,
 };
+
+tableIcons.Add.displayName = 'Add'
+tableIcons.Check.displayName = 'Check'
+tableIcons.Clear.displayName = 'Clear'
+tableIcons.Delete.displayName = 'Delete'
+tableIcons.DetailPanel.displayName = 'DetailPanel'
+tableIcons.Edit.displayName = 'Edit'
+tableIcons.Export.displayName = 'Export'
+tableIcons.Filter.displayName = 'Filter'
+tableIcons.FirstPage.displayName = 'FirstPage'
+tableIcons.LastPage.displayName = 'LastPage'
+tableIcons.NextPage.displayName = 'NextPage'
+tableIcons.PreviousPage.displayName = 'PreviousPage'
+tableIcons.ResetSearch.displayName = 'ResetSearch'
+tableIcons.Search.displayName = 'Search'
+
+tableIcons.SortArrow.displayName = 'SortArrow'
+tableIcons.ThirdStateCheck.displayName = 'ThirdStateCheck'
+tableIcons.ViewColumn.displayName = 'ViewColumn'
+tableIcons.Send.displayName = 'Send'
+
+tableIcons.More.displayName = 'More'
+tableIcons.History.displayName = 'History'
+tableIcons.Details.displayName = 'Details'
+
 
 export { tableIcons };
