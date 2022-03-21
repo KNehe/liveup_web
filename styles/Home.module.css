@@ -94,8 +94,8 @@
 }
 
 .feature_img {
-  object-fit: contain;
   width: 30%;
+  height: 50%;
 }
 
 /* ABOUT SECTION */
@@ -113,17 +113,18 @@
 }
 .About .title {
   font-size: clamp(1rem, 2.5rem, 3rem);
+  margin-bottom: 1.2rem;
 }
 
-.About > img {
-  width: 70%;
-  height: 40%;
-  max-height: 40%;
-  object-fit: contain;
+.about_wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  flex-wrap: wrap;
+}
+.about_text {
+  margin-top: 1rem;
 }
 
-@media screen and (max-width: 450px) {
-  .About > img {
-    width: 100%;
-  }
+.about_img {
+  width: 90%;
 }
