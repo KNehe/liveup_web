@@ -23,7 +23,7 @@ instance.interceptors.response.use(function(response){
         return
     }
 
-    return Promise.reject()
+    return Promise.reject(error)
 });
 
 export {CURRENT_API_URL}
